@@ -2,6 +2,10 @@
 
 // localStorage.clear()
 
+x=0
+
+
+
 const lxdBetOffices = [
     {'name': 'oddsPortal', 'checkPhrase': 'Oddsportal.com', 'notPhrase': 'zápas', 'matchCountBy': '\n/', 
         'linkToday': 'https://www.oddsportal.com/matches/football/' + fGetDateFormatted(0,'YYYYMMDD'), 
@@ -76,7 +80,8 @@ function fProcessText(sName, sText=''){
     return [csv, lxd]
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+const ttt = await fLoadCsv(sTransTeams)
   renderConsole(lxdBetOffices);
 });
 
