@@ -69,7 +69,9 @@ async function fPasteText(textareaId, sCheckWord, sCheckTrans='') {
 
 function fProcessText(sName, sText=''){
     sText = sText || localStorage.getItem(sName);
-    if (!sText) return(null, null)
+    if (!sText){ 
+        alert(`${sName} není uloženo.`)
+        return(null, null)}
 
     const lstText = sText
         .split('\n')
@@ -403,6 +405,9 @@ function fProcessOddsPortal(lines) {
             match.sTs = sTs
             match.sTeam1 = lines[i]
             match.sTeam2 = lines[i+4]
+            if (match.sTeam1.includes('Guara')){
+                x=0
+            }
             match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam1, 'sId') || ''
             match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam2, 'sId') || ''
             
@@ -445,8 +450,10 @@ function fProcessOddsPortal(lines) {
     //renderResults(lxdMatches);
 
     if (lxdNewOpTeams){
-        let csv = fLxdToCsv(lxdNewOpTeams)
-        fDownloadFile(csv, 'newOPteams.csv')
+        const csv = fLxdToCsv(lxdNewOpTeams)        
+        fDownloadFile('', csv, 'newOPteams.csv')
+    } else {
+        alert('Nejsou žádné nové tými')
     }
 
     return lxd
@@ -593,8 +600,13 @@ function fLxdToCsv(data) {
   return (BOM + csvContent)
 }
 
-function fDownloadFile(sName, sFilename=''){
-    const csvContent = localStorage.getItem(sName+'_Csv')
+function fDownloadFile(sStrorageKey, sCsv='', sFilename=''){
+    let csvContent = ''
+    if (sStrorageKey){
+        csvContent = localStorage.getItem(sName+'_Csv')
+    } else if(sCsv) {
+        csvContent = sCsv
+    }
     sFilename = sFilename || sName + '.csv';
     if (!csvContent){
 

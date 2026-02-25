@@ -237,7 +237,7 @@ function fConvertDMY(text) {
 }
 
 function fGetValByKeyFromLxd(lxd, sKeyName, xKey, sValName='dct'){
-  dct = lxd.find(c => c[sKeyName] === xKey)
+  dct = lxd.find(c => c[sKeyName].trim() === xKey.trim())
   if (!dct) return null
   if (sValName === 'dct') return dct
   return dct[sValName]
