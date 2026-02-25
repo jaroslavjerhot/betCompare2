@@ -1,0 +1,53 @@
+.match-card {
+    margin-bottom: 15px;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+
+  .container {
+    display: flex;
+    gap: 20px;
+  }
+
+  .panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .buttons {
+    margin-bottom: 8px;
+  }
+
+  .buttons button,
+  .buttons a {
+    margin-right: 5px;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+
+  textarea {
+    height: 300px;
+    resize: vertical;
+    font-family: monospace;
+  }
+textarea {
+      background-color: #636363;
+      color: white;
+      border-radius: 0.5rem;
+      border: 1px solid #444;
+      height: 300px;
+      resize: vertical;
+      padding: 10px;
+      font-family: monospace;
+    }
+
+.btn-link {
+text-decoration: none;
+}
+.age-old {
+color: red;
+font-weight: bold;
+}
