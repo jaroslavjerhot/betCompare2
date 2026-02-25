@@ -2,8 +2,14 @@
 
 // localStorage.clear()
 
-x=0
 
+let lxdTeams = []
+let lxdNewOpTeams = []
+document.addEventListener("DOMContentLoaded", async () => {
+    const csvTeams = await fLoadCsv(sTransTeams)
+    lxdTeams = fCsvToLxd(csvTeams)
+    renderConsole(lxdBetOffices);
+});
 
 
 const lxdBetOffices = [
@@ -75,15 +81,11 @@ function fProcessText(sName, sText=''){
         case 'tipsport':    lxd = fProcessTipsport(lstText); break;
         case 'allwyn':      lxd = fProcessAllwyn(lstText); break;
     }
-    csv = fCreateCsv(lxd)
+    csv = fLxdToCsv(lxd)
     localStorage.setItem(sName + '_Csv', csv)
     return [csv, lxd]
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-const ttt = await fLoadCsv(sTransTeams)
-  renderConsole(lxdBetOffices);
-});
 
 function renderConsole(lxd) {
   const container = document.getElementById("console");
@@ -278,7 +280,7 @@ function processTipsport() {
 
         }
     }
-    //fCreateCsv(lxdTipsport, 'tipsport.csv')
+    //fLxdToCsv(lxdTipsport, 'tipsport.csv')
     //renderResults(lxdMatches);
     return lxdTipsport
 };
@@ -351,10 +353,10 @@ function processBoth(){
 
             }})
 
-    // fCreateCsv(lxdOP, 'oddsportal.csv')
-    // fCreateCsv(lxdTS, 'tipsport.csv')
-    if (lxdToTrans.length>0) fCreateCsv(lxdToTrans, 'toTrans.csv')
-    //fCreateCsv(lxdCompared, 'compared.csv')
+    // fLxdToCsv(lxdOP, 'oddsportal.csv')
+    // fLxdToCsv(lxdTS, 'tipsport.csv')
+    if (lxdToTrans.length>0) fLxdToCsv(lxdToTrans, 'toTrans.csv')
+    //fLxdToCsv(lxdCompared, 'compared.csv')
     //renderResults(lxdCompared)
     const tbl = lxdToTable(lxdCompared,
         ['sSport','sLeague', 'team1' , 'team2', 'date', 'time', 
@@ -401,14 +403,20 @@ function fProcessOddsPortal(lines) {
             match.sTs = sTs
             match.sTeam1 = lines[i]
             match.sTeam2 = lines[i+4]
-            match.sTeam1Id = dctTeamsId[match.sTeam1] || 'xx'
-            match.sTeam2Id = dctTeamsId[match.sTeam2] || 'xx'
+            match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam1, 'sId') || ''
+            match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam2, 'sId') || ''
+            
+            if (!match.sTeam1Id) lxdNewOpTeams.push({'sName':'op', 'sTeam': match.sTeam1})
+            if (!match.sTeam2Id) lxdNewOpTeams.push({'sName':'op', 'sTeam': match.sTeam2})
+                
+            // match.sTeam1Id = dctTeamsId[match.sTeam1] || ''
+            // match.sTeam2Id = dctTeamsId[match.sTeam2] || ''
+
             match.sId = fGetDateFormatted(0,'yymmdd') + '-' + 
             match.sTeam1Id + '-' + match.sTeam2Id
         
             // match.team1TS = dctTransTeams[match.team1]
             // match.team2TS = dctTransTeams[match.team2]
-            
             
             match.iMargin = 0
             if (lines[i+7]*lines[i+9]*lines[i+11]>0){
@@ -430,11 +438,17 @@ function fProcessOddsPortal(lines) {
     }
     
     // if (lxd){
-    //     fCreateCsv(lxd, 'oddsPortal.csv')
+    //     fLxdToCsv(lxd, 'oddsPortal.csv')
     // } else {
     //     alert('Nic se nepodarilo stahnout.')
     // }
     //renderResults(lxdMatches);
+
+    if (lxdNewOpTeams){
+        let csv = fLxdToCsv(lxdNewOpTeams)
+        fDownloadFile(csv, 'newOPteams.csv')
+    }
+
     return lxd
 };
 function processAllwyn() {
@@ -480,7 +494,7 @@ function processAllwyn() {
         }
     }
     if (lxd.length>0){
-       fCreateCsv(lxd, 'oddsPortal.csv')
+       fLxdToCsv(lxd, 'oddsPortal.csv')
     } else {
         alert('Nic se nepodarilo stahnout.')
     }
@@ -551,7 +565,7 @@ function processTheOdds() {
                 
         }
     })
-    fCreateCsv(lxdOutTheOdds, 'theOdds.csv')
+    fLxdToCsv(lxdOutTheOdds, 'theOdds.csv')
     
     x=0
     //renderResults(lxdMatches);
@@ -565,7 +579,7 @@ function replaceDotToComma(str){
     // if (iCommas != 1) return(str)
     // return str.replace(/(\d+)\.(\d+)/g, '$1,$2')}
 
-function fCreateCsv(data, filename='') {
+function fLxdToCsv(data) {
   const headers = Object.keys(data[0]);
 
   const rows = data.map(obj =>

@@ -235,3 +235,10 @@ function fConvertDMY(text) {
 
   return null; // invalid
 }
+
+function fGetValByKeyFromLxd(lxd, sKeyName, xKey, sValName='dct'){
+  dct = lxd.find(c => c[sKeyName] === xKey)
+  if (!dct) return null
+  if (sValName === 'dct') return dct
+  return dct[sValName]
+}
