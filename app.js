@@ -432,7 +432,7 @@ function fProcessAllwyn(lines) {
             match.sTeam2 = lines[i].split(' - ')[1]
             
 
-            if (match.sTeam1.includes('PAOK')){
+            if (match.sTeam1.includes('Stras')){
                 x=0
             }
             // hleda se v teams v TS
