@@ -158,7 +158,7 @@ function getItemAge(key) {
   } 
 
 
-function clearText(textareaId) {
+function clearTextsmazat(textareaId) {
     document.getElementById(textareaId).value = "";
     localStorage.removeItem(textareaId)
 }
@@ -208,23 +208,13 @@ function createTimestamp(dateStr, timeStr) {
 }
 
 // app.js
-let rawTextTipsport = ''
+//let rawTextTipsport = ''
 
-function processTipsport() {
-    rawTextTipsport = localStorage.getItem('txtTipsport');
-    
-    const lines = rawTextTipsport
-        .split('\n')
-        .map(l => l.trim())
-        .filter(l => l.length >= 0);
-
-    
-
-    const dctDnesZitra = {'Dnes': fGetDateFormatted(0), 'Zítra': fGetDateFormatted(1)}
-
+function fProcessTipsport(lines) {
     let sLeague = ''
-    let lxdTipsport = []
-
+    let lxd = []
+    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Csv'))
+    let lxdNewTsTeams = []
     let lstSports=['Fotbal']
     lstSports = lstSports.map(v => ', ' + v);
 
@@ -244,129 +234,97 @@ function processTipsport() {
             isDecimalOdd(lines[i+7])) {
 
             let match = {};
+            match.sId = ''
             match.sSport = sSport;
+            match.sCountry = ''
             match.sLeague = sLeague;
-            match.team1 = lines[i].split(' - ')[0].replace('(1.z)','').trim()
-            match.team2 = lines[i].split(' - ')[1].replace('(1.z)','').trim()
+            
+            match.sDate = lines[i+1].split(' | ')[0].trim()
+            sTime = lines[i+1].split(' | ')[1].trim()
+            match.sTime = sTime.slice(0, sTime.indexOf(":") + 3);
+            // match.sTime = lines[i+1].split(' | ')[1].trim().slice(0, str.indexOf(":") + 3);
             
 
-            match.date = lines[i+1].split(' | ')[0].trim()
-            match.time = lines[i+1].split(' | ')[1].trim()
-            
-            if (match.date.includes('.')){
+            if (match.sDate.includes('.')){
                 // match.date = match.date.text.replace(/ /g, ''); // vymaze mezery z datumu
-                match.date = match.date.replaceAll(' ', ''); // vymaze mezery z datumu
+                match.sDate = match.sDate.replaceAll(' ', ''); // vymaze mezery z datumu
             }else{
-                match.date = dctDnesZitra[match.date]
+                match.sDate = dctDnesZitra[match.sDate]
             }
             
-            match.timestamp = createTimestamp(match.date, match.time)
-            match.odd1 = lines[i+3]
-            //match.odd1X = lines[i+4]
-            match.oddX= lines[i+5]
-            //match.odd2X = lines[i+6]
-            match.odd2 = lines[i+7]
-
-            match.odd1Frm = lines[i+3].replace('.', ',')
-            //match.odd1XFrm = lines[i+4].replace('.', ',')
-            match.oddXFrm= lines[i+5].replace('.', ',')
-            //match.odd2XFrm = lines[i+6].replace('.', ',')
-            match.odd2Frm = lines[i+7].replace('.', ',')
-
+            match.sTs = createTimestamp(match.sDate, match.sTime)
+            
+            match.sTeam1Id = ''
+            match.sTeam1 = lines[i].split(' - ')[0].replace('(1.z)','').replace('(odv.)','').trim()
+            match.sTeam2Id = ''
+            match.sTeam2 = lines[i].split(' - ')[1].replace('(1.z)','').replace('(odv.)','').trim()
+            
+            if (match.sTeam1.includes('PAOK')){
+                x=0
+            }
+            // hleda se v teams v TS
+            match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sTsTeam', match.sTeam1, 'sId') || ''
+            match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sTsTeam', match.sTeam2, 'sId') || ''
+            // hleda se v teams v OP
+            if (!match.sTeam1Id){
+                match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam1, 'sId') || ''
+                // byly nalezeny v op
+                if (match.sTeam1Id) lxdNewTsTeams.push({'sDescr':'stejny nazev jako v oddPortal', 'sId': match.sTeam1Id, 'sOpTeam': match.sTeam1, 'sTsTeam': match.sTeam1})
+            }
+            // hleda se v teams v OP
+            if (!match.sTeam2Id){
+                match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam2, 'sId') || ''
+                // byly nalezeny v op
+                if (match.sTeam2Id) lxdNewTsTeams.push({'sDescr':'stejny nazev jako v oddPortal', 'sId': match.sTeam2Id, 'sOpTeam': match.sTeam2, 'sTsTeam': match.sTeam2})
+            }
+            // team1 nalezen, team2 ne
+            if (match.sTeam1Id && !match.sTeam2Id){
+                dctOp = fGetValByKeyFromLxd(lxdOddsPortal,'sTeam1Id',match.sTeam1Id,'dct')
+                if (dctOp){
+                    lxdNewTsTeams.push({'sDescr':'doplneny team2', 'sId': dctOp.sTeam2Id, 'sOpTeam': dctOp.sTeam2, 'sTsTeam': match.sTeam2})
+                    match.sTeam2Id = dctOp.sTeam2Id
+                }
+            }
+            // team2 nalezen, team1 ne
+            if (!match.sTeam1Id && match.sTeam2Id){
+                dctOp = fGetValByKeyFromLxd(lxdOddsPortal,'sTeam2Id',match.sTeam2Id,'dct')
+                if (dctOp){
+                    lxdNewTsTeams.push({'sDescr':'doplneny team1', 'sId': dctOp.sTeam1Id, 'sOpTeam': dctOp.sTeam1, 'sTsTeam': match.sTeam1})
+                    match.sTeam1Id = dctOp.sTeam1Id
+                }
+            }
+            if (match.sTeam1Id && match.sTeam2Id){
+                match.sId = fGetDateFormatted(0,'yymmdd') + '-' + 
+                    match.sTeam1Id + '-' + match.sTeam2Id
+            }
+            //if (!match.sTeam2Id) lxdNewOpTeams.push({'sName':'op', 'sTeam': match.sTeam2})
+            
             if (lines[i+3] * lines[i+5] * lines[i+7] > 0){
-                match.margin = Math.round(((1/lines[i+3] + 1/lines[i+5] + 1/lines[i+7])-1)*1000)
+                match.iMargin = 1/lines[i+3] + 1/lines[i+5] + 1/lines[i+7]
             }
             
-            lxdTipsport.push(match);
+            match.iOdd1 = Number(lines[i+3])
+            //match.odd1X = lines[i+4]
+            match.iOddX= Number(lines[i+5])
+            //match.odd2X = lines[i+6]
+            match.iOdd2 = Number(lines[i+7])
+
+            lxd.push(match);
             i += 7;
 
         }
     }
-    //fLxdToCsv(lxdTipsport, 'tipsport.csv')
-    //renderResults(lxdMatches);
-    return lxdTipsport
+    if (lxdNewTsTeams.length>0){
+        const csv = fLxdToCsv(lxdNewTsTeams)        
+        fDownloadFile('', csv, 'newTsteams.csv')
+    } else {
+        alert('Nebyly nalezeny žádné nové týmy.')
+    }
+
+    //localStorage.setItem('tipsport_Csv',fLxdToCsv(lxd))
+    return lxd
+
 };
-
-function processBoth(){
-    const lxdOP = fProcessOddsPortal()
-    const lxdTS = processTipsport()
-    let lxdCompared = []
-    let lxdToTrans = []
-    
-    lxdOP.forEach(dctOP => {
-        if (dctOP.team1TS) {
-            if (dctOP.team1.includes('Boavista')){
-                x=0
-            }
-            lxdTS.forEach(item => {
-                if (item.team1.includes('Boavista')){
-                x=0
-                }
-                b1 = (item.team1 === dctOP.team1TS)
-                b2 = (item.team2 === dctOP.team2TS)
-                b3 = (item.sLeague === dctOP.sLeagueTS) 
-                b4 = (item.timestamp == dctOP.timestamp)
-                b5 = 0
-
-            })
-            let dctTS = lxdTS.find(item =>
-                item.team1 === dctOP.team1TS &&
-                item.team2 === dctOP.team2TS &&
-                item.sLeague === dctOP.sLeagueTS &&
-                item.timestamp == dctOP.timestamp
-                );
-            if (dctTS){
-                dctTS.odd1_OP = dctOP.odd1Frm
-                dctTS.oddX_OP = dctOP.oddXFrm
-                dctTS.odd2_OP = dctOP.odd2Frm
-                // dctTS.arbit = 1-(1/Math.max(dctOP.odd1, dctTS.odd1) + 1/Math.max(dctOP.oddX, dctTS.oddX) +
-                //     1/Math.max(dctOP.odd2, dctTS.odd2))
-                dctTS.rate1Pct = ((dctTS.odd1/dctOP.odd1 - 1)*100)
-                dctTS.rateXPct = ((dctTS.oddX/dctOP.oddX - 1)*100)
-                dctTS.rate2Pct = ((dctTS.odd2/dctOP.odd2 - 1)*100)
-                dctTS.rateMaxPct = Math.max(dctTS.rate1Pct, dctTS.rateXPct, dctTS.rate2Pct)
-
-                if (dctTS.rateMaxPct>-2) {
-                    dctTS.rate1Pct = dctTS.rate1Pct.toFixed(1)
-                    dctTS.rateXPct = dctTS.rateXPct.toFixed(1)
-                    dctTS.rate2Pct = dctTS.rate2Pct.toFixed(1)
-                    dctTS.rateMaxPct = dctTS.rateMaxPct.toFixed(1)
-                    lxdCompared.push(dctTS)
-                }
-            }
-
-            dctTS = lxdTS.find(item =>
-                (item.team1 === dctOP.team1TS && !(dctOP.team2TS) || 
-                 item.team2 === dctOP.team2TS && !(dctOP.team1TS)) &&                
-                item.timestamp == dctOP.timestamp
-                );
-            if (dctTS){
-                const dct = {
-                    'sCountry': dctOP.sCountry, 'sLeagueTS': dctTS.sLeague, 'timestamp': dctOP.timestamp,
-                    'team1OP': dctOP.team1, 
-                    'team1TS': dctTS.team1, 
-                    'team2OP': dctOP.team2,
-                    'team2TS': dctTS.team2,
-                    'oddDiff':  Math.abs(dctOP.odd1/dctTS.odd1-1) + 
-                                Math.abs(dctOP.oddX/dctTS.oddX-1) + 
-                                Math.abs(dctOP.odd2/dctTS.odd2-1)}
-                lxdToTrans.push(dct)     
-                }
-
-            }})
-
-    // fLxdToCsv(lxdOP, 'oddsportal.csv')
-    // fLxdToCsv(lxdTS, 'tipsport.csv')
-    if (lxdToTrans.length>0) fLxdToCsv(lxdToTrans, 'toTrans.csv')
-    //fLxdToCsv(lxdCompared, 'compared.csv')
-    //renderResults(lxdCompared)
-    const tbl = lxdToTable(lxdCompared,
-        ['sSport','sLeague', 'team1' , 'team2', 'date', 'time', 
-        'odd1Frm', 'oddXFrm', 'odd2Frm' , 'rate1Pct' , 'rateXPct' , 'rate2Pct', 'rateMaxPct'],
-        maxLevel = -2)
-
-    x=0
-}
 
 function fProcessOddsPortal(lines) {
     // rawText = document.getElementById('txtOddsPortal').value;
@@ -395,15 +353,18 @@ function fProcessOddsPortal(lines) {
         } else if (lines[i]!='' & lines[i]===lines[i+1] && lines[i+2]==='' && lines[i+3]==='–' && lines[i+4]===lines[i+5] &&
             isDecimalOdd(lines[i+7]) && isDecimalOdd(lines[i+9]) &&isDecimalOdd(lines[i+11])){
             let match = {};
+            match.sId = '' 
             match.sSport = sSport;
             match.sCountry = sCountry;
             match.sLeague = sLeague;
             sKey = sCountry + '|' + sLeague
-            match.sLeagueTS = dctTransLeagues[sKey]
+            //match.sLeagueTS = dctTransLeagues[sKey]
             match.sDate = sDate
             match.sTime = sTime
             match.sTs = sTs
+            match.sTeam1Id = ''
             match.sTeam1 = lines[i]
+            match.sTeam2Id = ''
             match.sTeam2 = lines[i+4]
             if (match.sTeam1.includes('Guara')){
                 x=0
@@ -418,7 +379,7 @@ function fProcessOddsPortal(lines) {
             // match.sTeam2Id = dctTeamsId[match.sTeam2] || ''
 
             match.sId = fGetDateFormatted(0,'yymmdd') + '-' + 
-            match.sTeam1Id + '-' + match.sTeam2Id
+                match.sTeam1Id + '-' + match.sTeam2Id
         
             // match.team1TS = dctTransTeams[match.team1]
             // match.team2TS = dctTransTeams[match.team2]
@@ -427,93 +388,175 @@ function fProcessOddsPortal(lines) {
             if (lines[i+7]*lines[i+9]*lines[i+11]>0){
                 match.iMargin = (1/lines[i+7] + 1/lines[i+9]+ 1/lines[i+11])
             }
-            match.iOdd1 = lines[i+ 7]*match.iMargin
-            match.iOddX = lines[i+ 9]*match.iMargin
-            match.iOdd2 = lines[i+11]*match.iMargin
-
-            // match.margin2 = (1/match.odd1 + 1/match.oddX+ 1/match.odd2)
-            
-            // match.odd1Frm = lines[i+7].replace('.', ',')
-            // match.oddXFrm= lines[i+9].replace('.', ',')
-            // match.odd2Frm = lines[i+11].replace('.', ',')
+            match.iNormOdd1 = lines[i+ 7]*match.iMargin
+            match.iNormOddX = lines[i+ 9]*match.iMargin
+            match.iNormOdd2 = lines[i+11]*match.iMargin
 
             lxd.push(match);
             i += 11;
         }
     }
     
-    // if (lxd){
-    //     fLxdToCsv(lxd, 'oddsPortal.csv')
-    // } else {
-    //     alert('Nic se nepodarilo stahnout.')
-    // }
-    //renderResults(lxdMatches);
-
-    if (lxdNewOpTeams){
+    if (lxdNewOpTeams.length>0){
         const csv = fLxdToCsv(lxdNewOpTeams)        
         fDownloadFile('', csv, 'newOPteams.csv')
     } else {
-        alert('Nejsou žádné nové tými')
+        alert('Nebyly nalezeny žádné nové týmy.')
     }
 
+    //localStorage.setItem('oddsPortal_Csv',fLxdToCsv(lxd))
     return lxd
 };
-function processAllwyn() {
-    rawText = localStorage.getItem('txtAllwyn');
-    
-    const lines = rawText
-        .split('\n')
-        .map(l => l.trim())
-        .filter(l => l.length >= 0);
-
-    const dctDnesZitra = {'Dnes': fGetDateFormatted(0), 'Zítra': fGetDateFormatted(1)}
-
+function fProcessAllwyn(lines) {
     let lxd = []
-
+    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Csv'))
+    
     let lstDays=['Dnes | ', 'Zítra | ']
+    let lxdNewAwTeams = []
     
     for (let i = 0; i < lines.length; i++) {
         if  (lines[i].includes(' - ') && lstDays.some(word => lines[i+1].includes(word)) && 
             lines[i+3].startsWith('+') &&
             isDecimalOdd(lines[i+5]) && isDecimalOdd(lines[i+9]) &&isDecimalOdd(lines[i+13])) {
             let match = {};
+            match.sId = ''
             match.sSport = 'Fotbal';
-            match.sTeam1_AW = lines[i].split(' - ')[0]
-            match.sTeam2_AW = lines[i].split(' - ')[1]
             match.sDate = lines[i+1].split(' | ')[0]
             match.sTime = lines[i+1].split(' | ')[1]
             match.sDate = dctDnesZitra[match.sDate]
-                        
-            match.sTeam1_OP = dctTransTeams2[match.sTeam1_AW]
-            match.sTeam2_OP = dctTransTeams2[match.sTeam2_AW]
+            match.sTs = createTimestamp(match.sDate, match.sTime)
+            
+            match.sTeam1Id = ''
+            match.sTeam1 = lines[i].split(' - ')[0]
+            match.sTeam2Id = ''
+            match.sTeam2 = lines[i].split(' - ')[1]
+            
 
-            // if (!match.sTeam1_TS) match.sTeam1_TS = dctTransTeams[match.sTeam1_AW]
-            // if (!match.sTeam2_TS) match.sTeam2_TS = dctTransTeams[match.sTeam2_AW]
+            if (match.sTeam1.includes('PAOK')){
+                x=0
+            }
+            // hleda se v teams v TS
+            match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sAwTeam', match.sTeam1, 'sId') || ''
+            match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sAwTeam', match.sTeam2, 'sId') || ''
+            // hleda se v teams v OP
+            if (!match.sTeam1Id){
+                match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam1, 'sId') || ''
+                // byly nalezeny v op
+                if (match.sTeam1Id) lxdNewAwTeams.push({'sDescr':'stejny nazev jako v oddPortal', 'sId': match.sTeam1Id, 'sOpTeam': match.sTeam1, 'sAwTeam': match.sTeam1})
+            }
+            // hleda se v teams v OP
+            if (!match.sTeam2Id){
+                match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam2, 'sId') || ''
+                // byly nalezeny v op
+                if (match.sTeam2Id) lxdNewAwTeams.push({'sDescr':'stejny nazev jako v oddPortal', 'sId': match.sTeam2Id, 'sOpTeam': match.sTeam2, 'sAwTeam': match.sTeam2})
+            }
+            // team1 nalezen, team2 ne
+            if (match.sTeam1Id && !match.sTeam2Id){
+                dctOp = fGetValByKeyFromLxd(lxdOddsPortal,'sTeam1Id',match.sTeam1Id,'dct')
+                if (dctOp){
+                    lxdNewAwTeams.push({'sDescr':'doplneny team2', 'sId': dctOp.sTeam2Id, 'sOpTeam': dctOp.sTeam2, 'sAwTeam': match.sTeam2})
+                    match.sTeam2Id = dctOp.sTeam2Id
+                }
+            }
+            // team2 nalezen, team1 ne
+            if (!match.sTeam1Id && match.sTeam2Id){
+                dctOp = fGetValByKeyFromLxd(lxdOddsPortal,'sTeam2Id',match.sTeam2Id,'dct')
+                if (dctOp){
+                    lxdNewAwTeams.push({'sDescr':'doplneny team1', 'sId': dctOp.sTeam1Id, 'sOpTeam': dctOp.sTeam1, 'sAwTeam': match.sTeam1})
+                    match.sTeam1Id = dctOp.sTeam1Id
+                }
+            }
+            if (match.sTeam1Id && match.sTeam2Id){
+                match.sId = fGetDateFormatted(0,'yymmdd') + '-' + 
+                    match.sTeam1Id + '-' + match.sTeam2Id
+            }
             
-            match.sTimestamp = createTimestamp(match.sDate, match.sTime)
             
-            match.odd1_AW = Number(lines[i+5])
-            match.oddX_AW= Number(lines[i+9])
-            match.odd2_AW = Number(lines[i+13])
+            match.iMargin = 0
+            if (lines[i+5]*lines[i+9]*lines[i+13]>0){
+                match.iMargin = (1/lines[i+5] + 1/lines[i+9]+ 1/lines[i+13])
+            }
+            
+            match.iOdd1 = Number(lines[i+5])
+            match.iOddX = Number(lines[i+9])
+            match.iOdd2 = Number(lines[i+13])
 
             lxd.push(match);
             i += 13;
         }
     }
-    if (lxd.length>0){
-       fLxdToCsv(lxd, 'oddsPortal.csv')
+   if (lxdNewAwTeams.length>0){
+        const csv = fLxdToCsv(lxdNewAwTeams)        
+        fDownloadFile('', csv, 'newAwteams.csv')
     } else {
-        alert('Nic se nepodarilo stahnout.')
+        alert('Nebyly nalezeny žádné nové týmy.')
     }
 
+    //localStorage.setItem('oddsPortal_Csv',fLxdToCsv(lxd))
     return lxd
 };
+function fCompareOdds(){
+    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Csv'))
+    const lxdTs = fCsvToLxd(localStorage.getItem('tipsport_Csv'))
+    const lxdAw = fCsvToLxd(localStorage.getItem('allwyn_Csv'))
+    lxdCompared = []
+
+    lxdOddsPortal.forEach(dctOp =>{
+        sId = dctOp.sId
+        dctTs = fGetValByKeyFromLxd(lxdTs, 'sId', sId, sValName='dct')
+        dctAw = fGetValByKeyFromLxd(lxdAw, 'sId', sId, sValName='dct')
+        dctOdd1 = {}
+        dctOddX = {}
+        dctOdd2 = {}
+        sFound = ''
+        if (dctTs){
+            dctOdd1['ts'] = dctTs.iOdd1
+            dctOddX['ts'] = dctTs.iOddX
+            dctOdd2['ts'] = dctTs.iOdd2
+            sFound +='tipsport, '
+        }
+        if (dctAw){
+            dctOdd1['aw'] = dctAw.iOdd1
+            dctOddX['aw'] = dctAw.iOddX
+            dctOdd2['aw'] = dctAw.iOdd2
+            sFound +='allwyn, '
+        }
+        if (dctTs || dctAw){
+            [dctOp.srcMaxOdd1, dctOp.iMaxOdd1] = Object.entries(dctOdd1)
+                .reduce((max, current) => current[1] > max[1] ? current : max);
+            [dctOp.srcMaxOddX, dctOp.iMaxOddX] = Object.entries(dctOddX)
+                .reduce((max, current) => current[1] > max[1] ? current : max);
+            [dctOp.srcMaxOdd2, dctOp.iMaxOdd2] = Object.entries(dctOdd2)
+                .reduce((max, current) => current[1] > max[1] ? current : max);
+            
+            dctOp.iRate1 = dctOp.iMaxOdd1/dctOp.iNormOdd1
+            dctOp.iRateX = dctOp.iMaxOddX/dctOp.iNormOddX
+            dctOp.iRate2 = dctOp.iMaxOdd2/dctOp.iNormOdd2
+            dctOp.iMargin = 1/dctOp.iMaxOdd1 + 1/dctOp.iMaxOddX + 1/dctOp.iMaxOdd2
+            
+            
+            lxdCompared.push(dctOp)
+        }
+        
+
+
+    })
+    csv = fLxdToCsv(lxdCompared)
+    fDownloadFile('', csv, 'compared.csv')
+    
+    
+    
+}
+
+
 
 function secondsUntil(commenceTime) {
   const eventMs = new Date(commenceTime).getTime();
   const nowMs = Date.now();
   return Math.floor((eventMs - nowMs) / 1000);
 }
+
+
 
 let jsonTheOdds = ''
 
@@ -578,19 +621,13 @@ function processTheOdds() {
     //renderResults(lxdMatches);
 };
 
-function replaceDotToComma(str){
-    if (!str) return ''
-    if (typeof str != "number") return str
-    return str.toString().replace('.',',')}
-    // iCommas = str.length - str.replaceAll('.','').length
-    // if (iCommas != 1) return(str)
-    // return str.replace(/(\d+)\.(\d+)/g, '$1,$2')}
+
 
 function fLxdToCsv(data) {
   const headers = Object.keys(data[0]);
 
   const rows = data.map(obj =>
-    headers.map(h => `"${replaceDotToComma(obj[h])}"`).join(';')
+    headers.map(h => `"${fReplaceDotToComma(obj[h])}"`).join(';')
   );
 
   const csvContent = [headers.join(';'), ...rows].join('\n');
@@ -600,14 +637,14 @@ function fLxdToCsv(data) {
   return (BOM + csvContent)
 }
 
-function fDownloadFile(sStrorageKey, sCsv='', sFilename=''){
+function fDownloadFile(sStorageKey, sCsv='', sFilename=''){
     let csvContent = ''
-    if (sStrorageKey){
-        csvContent = localStorage.getItem(sName+'_Csv')
+    if (sStorageKey){
+        csvContent = localStorage.getItem(sStorageKey+'_Csv')
     } else if(sCsv) {
         csvContent = sCsv
     }
-    sFilename = sFilename || sName + '.csv';
+    sFilename = sFilename || sStorageKey + '.csv';
     if (!csvContent){
 
         alert(`Soubor ${sFilename} nebyl zatím vytvořen`)

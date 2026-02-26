@@ -28,7 +28,7 @@ function fCsvToLxd(csvText) {
   
 
   return lines.slice(1).map(line => {
-    const values = line.split(';').map(v => v.trim());
+    const values = line.split(';').map(v => fReplaceCommaToDot(v.replace(/^"(.*)"$/, '$1')));
     const obj = {};
 
     headers.forEach((header, i) => {
@@ -38,6 +38,17 @@ function fCsvToLxd(csvText) {
     return obj;
   });
 }
+
+function fReplaceDotToComma(str){
+    if (!str) return ''
+    if (typeof str != "number") return str
+    return str.toString().replace('.',',')}
+
+function fReplaceCommaToDot(str){
+    if (!str) return ''
+    const iStr = Number(str.replace(',','.'))
+    if (iStr===iStr) return iStr
+    return str.trim()}
 
 
 
