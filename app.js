@@ -83,6 +83,7 @@ function fProcessText(sName, sText=''){
         case 'tipsport':    lxd = fProcessTipsport(lstText); break;
         case 'allwyn':      lxd = fProcessAllwyn(lstText); break;
     }
+    alert(`V datech od ${sName} bylo zpracováno ${lxd.lenght} týmů.`)
     csv = fLxdToCsv(lxd)
     localStorage.setItem(sName + '_Csv', csv)
     return [csv, lxd]
@@ -403,7 +404,7 @@ function fProcessOddsPortal(lines) {
     } else {
         alert('Nebyly nalezeny žádné nové týmy.')
     }
-
+    
     //localStorage.setItem('oddsPortal_Csv',fLxdToCsv(lxd))
     return lxd
 };
@@ -541,9 +542,12 @@ function fCompareOdds(){
 
 
     })
-    csv = fLxdToCsv(lxdCompared)
-    fDownloadFile('', csv, 'compared.csv')
-    
+    if (fLxdToCsv.length === 0){
+        alert('K porovnání nebylo nic nalezeno.')
+    }else{
+        csv = fLxdToCsv(lxdCompared)
+        fDownloadFile('', csv, 'compared.csv')
+    }
     
     
 }

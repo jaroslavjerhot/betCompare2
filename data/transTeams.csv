@@ -1,4 +1,4 @@
-sId;X.48;sAwTeam;sTsTeam
+ï»¿sId;sOpTeam;sAwTeam;sTsTeam
 f0000;t11-49;;
 f0001;2 de Mayo;;
 f0002;A. Klagenfurt;;
@@ -9,7 +9,7 @@ f0006;Abu Qir Semad;;
 f0007;AC Milan;;AC Milan
 f0008;Academico Viseu;;Academico Viseu
 f0009;Academico Viseu U23;;
-f0010;AD Merida;;Mérida
+f0010;AD Merida;;M rida
 f0011;AD Tarma;;ADT
 f0012;Adama City;;
 f0013;Adamstown Rosebud;;Adamstown
@@ -20,7 +20,7 @@ f0017;AEK Athens;;AEK Athens
 f0018;AEK Larnaca;;AEK Larnaca
 f0019;Afturelding;;
 f0020;Agua Santa;;
-f0021;Aguia De Maraba;;Águia de Marabá
+f0021;Aguia De Maraba;; guia de Marab 
 f0022;Aguila;;Aguila
 f0023;Aguilas FC;;
 f0024;AIK;;AIK Stockholm
@@ -78,23 +78,23 @@ f0075;Al Zulfi;;
 f0076;Alagoinhas;;Alagoinhas
 f0077;Alajuelense;;Alajuelense
 f0078;Alashkert;;Alashkert
-f0079;Alaves;Alaves;Alavés
+f0079;Alaves;Alaves;Alav s
 f0080;Albacete;;Albacete
 f0081;AlbinoLeffe;;AlbinoLeffe
 f0082;Albirex Niigata;;Niigata
-f0083;Alcorcon;;Alcorcón
+f0083;Alcorcon;;Alcorc n
 f0084;Aldershot;;
 f0085;Al-Duhail;;Al Duhail
 f0086;Al-Faisaly;;
 f0087;Al-Faisaly Amman;;
 f0088;Algeciras;;Algeciras
 f0089;Al-Gharafa;;Al Gharafa
-f0090;Alianza Atl.;;Alianza Atlético Sullana
+f0090;Alianza Atl.;;Alianza Atl tico Sullana
 f0091;Alianza FC;;Alianza FC
 f0092;Al-Ittifaq;;
 f0093;All Boys;;All Boys
 f0094;Almere City;;Almere City
-f0095;Almeria;;Almería
+f0095;Almeria;;Almer a
 f0096;Almirante Brown;;Almirante Brown
 f0097;Al-Muharraq;;
 f0098;Al-Sadd;;Al Sadd
@@ -123,7 +123,7 @@ f0120;Antigua;;Antigua
 f0121;APOEL;;APOEL Nicosia
 f0122;APS Bomet;;
 f0123;Araba;;
-f0124;Arabe Unido;;Árabe Unido
+f0124;Arabe Unido;; rabe Unido
 f0125;Ararat Yerevan;;
 f0126;Araz;;
 f0127;Arda;;
@@ -148,14 +148,14 @@ f0145;Aston Villa U21;;
 f0146;Atalanta;;Atalanta Bergamo
 f0147;Atalanta U23;;Atalanta Bergamo U23
 f0148;Ath Bilbao B;;
-f0149;Athletic Bilbao W;;Bilbao Ž
+f0149;Athletic Bilbao W;;Bilbao  
 f0150;Athletico-PR;;
 f0151;Athlone;;
 f0152;Atl. Madrid U19;;
 f0153;Atl. Nacional;;
 f0154;Atl. Ottawa;;
-f0155;Atl. Rafaela;;Atlético Rafaela
-f0156;Atl. San Luis;;Atlético San Luis
+f0155;Atl. Rafaela;;Atl tico Rafaela
+f0156;Atl. San Luis;;Atl tico San Luis
 f0157;Atl. Tucuman;;
 f0158;Atlante;;
 f0159;Atlas;;Atlas Guadalajara
@@ -177,7 +177,7 @@ f0174;Avispa Fukuoka;Avispa Fukuoka;Fukuoka
 f0175;Ayutthaya Utd;;Ayutthaya United
 f0176;AZ Alkmaar;;Alkmaar
 f0177;AZ Alkmaar U19;;
-f0178;B. Monchengladbach;;Mönchengladbach
+f0178;B. Monchengladbach;;M nchengladbach
 f0179;B.93;;
 f0180;Babelsberg;;
 f0181;Baglan Dragons;;
@@ -205,7 +205,7 @@ f0202;Beerschot VA;;Beerschot
 f0203;Bechar Djedid;;
 f0204;Beit Shean;;
 f0205;Beitar Yavne;;
-f0206;Bekescsaba 1912;;Békéscsaba
+f0206;Bekescsaba 1912;;B k scsaba
 f0207;Belgrano;;
 f0208;Bellinzona;;Bellinzona
 f0209;Ben Aknoun;;Ben Aknoun
@@ -256,7 +256,7 @@ f0253;Bregenz;;Bregenz
 f0254;Breidablik;;
 f0255;Brescia;;Union Brescia
 f0256;Brighton U21;;Brighton U21
-f0257;Brighton W;;Brighton Ž
+f0257;Brighton W;;Brighton  
 f0258;Brisbane City;;Brisbane City
 f0259;Brisbane Roar U23;;Brisbane Roar Youth
 f0260;Bristol City;Bristol City;Bristol City
@@ -269,7 +269,7 @@ f0266;Buchbach;;
 f0267;Burgos CF;;Burgos CF
 f0268;Buriram;;
 f0269;Burnley U21;;
-f0270;BVSC-Zuglo;;BVSC Zugló
+f0270;BVSC-Zuglo;;BVSC Zugl 
 f0271;BW Linz;;Blau Weiss Linz
 f0272;CA Batna;;
 f0273;Cacahuatique;;Cacahuatique
@@ -285,7 +285,7 @@ f0282;Caracas;;Caracas
 f0283;Cardiff Metropolitan;;
 f0284;Carlisle;;
 f0285;Carpi;;Carpi
-f0286;Cartagines;;Cartaginés
+f0286;Cartagines;;Cartagin s
 f0287;Castanhal;;
 f0288;Castellon B;;
 f0289;Catania;;Catania
@@ -296,7 +296,7 @@ f0293;Celje;Celje;Celje
 f0294;Celta Vigo;;Celta Vigo
 f0295;Celtic;Celtic Glasgow;Celtic Glasgow
 f0296;Central Coast Mariners;;Central Coast Mariners
-f0297;Central Cordoba;;Central Córdoba SdE
+f0297;Central Cordoba;;Central C rdoba SdE
 f0298;Central Esp.;;Central Espanol
 f0299;Cerezo Osaka;;Cerezo
 f0300;Cerro Porteno;;
@@ -308,11 +308,11 @@ f0305;Cienciano;;Cienciano Cusco
 f0306;Cittadella;;
 f0307;Ciudad Bolivar;;Ciudad de Bolivar
 f0308;Clermont;;Clermont
-f0309;Club A. Guemes;;Güemes
+f0309;Club A. Guemes;;G emes
 f0310;Club Brugge U19;;
-f0311;Club Leon;;León
+f0311;Club Leon;;Le n
 f0312;Coastal Spirit;;
-f0313;Coban Imperial;;Cobán Imperial
+f0313;Coban Imperial;;Cob n Imperial
 f0314;Cobh Ramblers;Cobh Ramblers;Cobh Ramblers
 f0315;Cobresal;Cobresal;Cobresal
 f0316;COD Meknes;;
@@ -347,7 +347,7 @@ f0344;Cruzeiro;;Cruzeiro
 f0345;Cruzeiro U20;;
 f0346;Crvena zvezda;CZ Beograd;CZ Beograd
 f0347;Crystal Palace;;Crystal Palace
-f0348;Csakvari;;Csákvári
+f0348;Csakvari;;Cs kv ri
 f0349;CSKA 1948 Sofia;;CSKA 1948 Sofia
 f0350;CSM Slatina;;CSM Slatina
 f0351;Cukaricki;;Cukaricki Beograd
@@ -376,9 +376,9 @@ f0373;Dep. Tachira (Ven);;
 f0374;Deportes Tolima (Col);;
 f0375;Deportivo Achuapa;;
 f0376;Deportivo Madryn;;
-f0377;Deportivo Maipu;;Deportivo Maipú
+f0377;Deportivo Maipu;;Deportivo Maip 
 f0378;Deportivo Mixco;Deportivo Mixco;
-f0379;Deportivo Moron;Deportivo Moron;Deportivo Morón
+f0379;Deportivo Moron;Deportivo Moron;Deportivo Mor n
 f0380;Derby Academie;;
 f0381;Derry City;Derry City;Derry City
 f0382;Detonit Plackovica;;
@@ -411,8 +411,8 @@ f0408;Dusseldorf II;;
 f0409;Dyn. Kyiv;;
 f0410;East Bengal;;East Bengal
 f0411;Eastleigh;;
-f0412;Ecuador U20 W;;Ekvádor Ž-U20
-f0413;Eibar W;;Eibar Ž
+f0412;Ecuador U20 W;;Ekv dor  -U20
+f0413;Eibar W;;Eibar  
 f0414;Eilenburg;;Eilenburg
 f0415;Eindhoven FC;;
 f0416;El Bayadh;;El Bayadh
@@ -427,10 +427,10 @@ f0424;Esperance Tunis;;
 f0425;Esteli;;
 f0426;Estoril;;Estoril Praia
 f0427;Estudiantes L.P.;;
-f0428;Estudiantes Rio Cuarto;Estudiantes Rio Cuarto;Estudiantes Río Cuarto
+f0428;Estudiantes Rio Cuarto;Estudiantes Rio Cuarto;Estudiantes R o Cuarto
 f0429;Ethiopia Bunna;;
 f0430;Everton U21;;
-f0431;Everton W;;Everton Ž
+f0431;Everton W;;Everton  
 f0432;Fakel Voronezh;;
 f0433;FAR Rabat;;
 f0434;Farnborough;;
@@ -456,7 +456,7 @@ f0453;Finn Harps;Finn Harps;Finn Harps
 f0454;Fiorentina;Fiorentina;Fiorentina
 f0455;First Vienna;;First Vienna
 f0456;First Vienna W;;
-f0457;FK Panevezys;;FK Panevežys
+f0457;FK Panevezys;;FK Paneve ys
 f0458;FK Sarajevo;;
 f0459;Flamengo RJ;;
 f0460;Fleury-Merogis;;
@@ -489,7 +489,7 @@ f0486;Getafe;;Getafe
 f0487;Geylang;;
 f0488;Giana Erminio;;
 f0489;Gifu;;Gifu
-f0490;Gijon;;Gijón
+f0490;Gijon;;Gij n
 f0491;Gil Vicente;;Gil Vicente
 f0492;Gimnasia Jujuy;;Gimnasia Jujuy
 f0493;Gimnasia L.P.;;
@@ -501,10 +501,10 @@ f0498;Gleisdorf;;
 f0499;Gnistan;;Gnistan Helsinki
 f0500;Goa;;
 f0501;Godoy Cruz;CD Godoy Cruz;Godoy Cruz
-f0502;Goias;;Goiás
+f0502;Goias;;Goi s
 f0503;Gold Coast Knights;;Gold Coast Knights
-f0504;Goztepe;;Göztepe
-f0505;Grau;;Atlético Grau
+f0504;Goztepe;;G ztepe
+f0505;Grau;;Atl tico Grau
 f0506;Gremio;;Gremio
 f0507;Gremio Prudente;;
 f0508;Gremio U20;;
@@ -519,7 +519,7 @@ f0516;Guarani;;Guarani Asuncion
 f0517;Guarany de Bage;;
 f0518;Guastatoya;;Guastatoya
 f0519;Gulf United;;
-f0520;Gyor;;Györi ETO
+f0520;Gyor;;Gy ri ETO
 f0521;Gzira;;Gzira
 f0522;H. Akko;;
 f0523;H. Beer Sheva;;Hapoel Beer Sheva
@@ -527,7 +527,7 @@ f0524;H. Ironi Rishon;;
 f0525;H. Marmorek;;
 f0526;H. Migdal HaEmek;;
 f0527;H. Raanana;;
-f0528;Hacken;;Häcken
+f0528;Hacken;;H cken
 f0529;Hajduk Split;;Hajduk Split
 f0530;Halmstad;;Halmstad
 f0531;Hamburger SV II;;
@@ -560,7 +560,7 @@ f0557;Hobro;;Hobro
 f0558;Hoffenheim II;;Hoffenheim II
 f0559;Holon Yermiyahu;;
 f0560;Holywell;;
-f0561;Honved;;Honvéd
+f0561;Honved;;Honv d
 f0562;Hostert;;Hostert
 f0563;Houston Dynamo;;Houston
 f0564;Huddersfield U21;;
@@ -573,11 +573,11 @@ f0570;Chaco For Ever;;Chaco For Ever
 f0571;Chapecoense-SC;;Chapecoense
 f0572;Charleroi;;Charleroi
 f0573;Charlestown Azzurri;;Charlestown Azzurri
-f0574;Charlton W;;Charlton Ž
+f0574;Charlton W;;Charlton  
 f0575;Chateauroux;;Chateauroux
 f0576;Chaves;;Chaves
 f0577;Chelsea U19;;
-f0578;Chelsea W;;Chelsea Ž
+f0578;Chelsea W;;Chelsea  
 f0579;Cheltenham;;Cheltenham
 f0580;Chemie Leipzig;;
 f0581;Chemnitzer;;
@@ -599,7 +599,7 @@ f0596;Ind. Yumbo;;
 f0597;Independencia;;Independencia
 f0598;Independente AP;;
 f0599;Independiente;;
-f0600;Inter Bogotá;;Inter Bogotá
+f0600;Inter Bogot ;;Inter Bogot 
 f0601;Inter de Limeira;;
 f0602;Inter F.A;;Inter F.A
 f0603;Inter Miami;;Inter Miami
@@ -655,7 +655,7 @@ f0652;Kakamega Homeboyz;;
 f0653;Kamatamare;;Kamatamare
 f0654;Kamaz;;
 f0655;Kanazawa;;Kanazawa
-f0656;KaPa;;KäPa Helsinki
+f0656;KaPa;;K Pa Helsinki
 f0657;Kapaz;;Kapaz
 f0658;Karagumruk;Fatih Karagumruk SK;Karagumruk
 f0659;Karcagi;;Karcagi
@@ -683,7 +683,7 @@ f0680;Kolos Kovalivka;;Kolos Kovalivka
 f0681;Konyaspor;Konyaspor;Konyaspor
 f0682;Korofina;;
 f0683;Kortrijk;;Kortrijk
-f0684;Kozarmisleny SE;;Kozármisleny
+f0684;Kozarmisleny SE;;Koz rmisleny
 f0685;Kromeriz;;
 f0686;Kuala Lumpur City;;Kuala Lumpur City FC
 f0687;Kuching City FC;;Kuching City FC
@@ -709,7 +709,7 @@ f0706;Lecco;;Lecco
 f0707;Leczna;Gornik Leczna;Leczna
 f0708;Legia U19;;
 f0709;Lech Poznan;;
-f0710;Lechia Gdansk;;Gdaòsk
+f0710;Lechia Gdansk;;Gda sk
 f0711;Leiknir;;
 f0712;Leixoes U23;;
 f0713;Lens;Lens;Lens
@@ -719,7 +719,7 @@ f0716;Leopards;;
 f0717;Levadiakos;;Levadiakos
 f0718;Levante;;Levante
 f0719;Levski Sofia;;Levski Sofia
-f0720;Liberec W;;Liberec Ž
+f0720;Liberec W;;Liberec  
 f0721;Liberia;;Liberia
 f0722;Libertad Asuncion;Libertad Asuncion;Libertad Asuncion
 f0723;Liefering;;Liefering
@@ -729,7 +729,7 @@ f0726;Liniers;;CSD Liniers
 f0727;Lion City;;Lion City Sailors
 f0728;Liverpool;;Liverpool
 f0729;Liverpool M.;;
-f0730;Liverpool W;;Liverpool Ž
+f0730;Liverpool W;;Liverpool  
 f0731;Livingston;;Livingston
 f0732;Llanelli;;Llanelli
 f0733;Lokomotive Leipzig;;Loko Leipzig
@@ -752,14 +752,14 @@ f0749;Lyon;;Lyon
 f0750;M. Ironi Ashdod;;
 f0751;M. Ironi Kiryat Malachi;;
 f0752;Maastricht;;Maastricht
-f0753;Macara;;Macará
+f0753;Macara;;Macar 
 f0754;Macarthur FC;;Macarthur FC
 f0755;Maccabi Haifa U19;;
 f0756;Maccabi Jaffa;;
 f0757;Maccabi Neve Shaanan Eldad;;
 f0758;Maccabi Petah Tikva;;
 f0759;Maccabi Yavne;;
-f0760;Macva;;Maèva Šabac
+f0760;Macva;;Ma va  abac
 f0761;Madagascar W;;
 f0762;Madura United;;Madura United
 f0763;Mafra;;
@@ -770,22 +770,22 @@ f0767;Maguary;;
 f0768;Machida;;Machida
 f0769;Maitland;;Maitland
 f0770;Majd FC;;
-f0771;Malaga;;Málaga
+f0771;Malaga;;M laga
 f0772;Mallorca;;Mallorca
-f0773;Malmo FF;;Malmö FF
+f0773;Malmo FF;;Malm  FF
 f0774;Managua FC;;FC Managua
 f0775;Manauara;;
-f0776;Manchester Utd W;;Manchester United Ž
+f0776;Manchester Utd W;;Manchester United  
 f0777;Manisa FK;;Manisa FK
 f0778;Manly Utd;;Manly United
 f0779;Mara Sugar;;
 f0780;Maranhao;;
-f0781;Marathon;;Marathón
+f0781;Marathon;;Marath n
 f0782;Marbella;;Marbella
 f0783;Marconi Stallions;;Marconi Stallions
 f0784;Marchfeld;;
 f0785;Maribor;;Maribor
-f0786;Marica;;Maricá
+f0786;Marica;;Maric 
 f0787;Marquense;;Marquense
 f0788;Martinique;;Martinique
 f0789;Masar;;
@@ -799,8 +799,8 @@ f0796;Meppen;;
 f0797;Metlaoui;;
 f0798;Meuselwitz;;Meuselwitz
 f0799;Mexico;;
-f0800;Mezokovesd-Zsory;;Mezökövesd
-f0801;Mictlan;CD Mictlan;Mictlán
+f0800;Mezokovesd-Zsory;;Mez k vesd
+f0801;Mictlan;CD Mictlan;Mictl n
 f0802;Midland;;Ferrocarril Midland
 f0803;Midtjylland;;Midtjylland
 f0804;Miguelito;;
@@ -811,7 +811,7 @@ f0808;Minnesota United;;Minnesota United
 f0809;Mito;;Mito
 f0810;Mixto;;Mixto
 f0811;Mjallby;;
-f0812;Mlada Boleslav;;Mladá Boleslav
+f0812;Mlada Boleslav;;Mlad  Boleslav
 f0813;MO Bejaia;;
 f0814;MO Constantine;;
 f0815;Modena;;Modena
@@ -837,7 +837,7 @@ f0834;Muang Thong Utd;;Muangthong United
 f0835;Mumbai City;;Mumbai City FC
 f0836;Municipal;;Municipal
 f0837;Municipal Limeno;;Municipal Limeno
-f0838;Munich 1860;;München 1860
+f0838;Munich 1860;;M nchen 1860
 f0839;NAC Breda;;Breda
 f0840;Nacional Asuncion;Nacional Asuncion;Nacional Asuncion
 f0841;Nacional Potosi;;
@@ -848,7 +848,7 @@ f0845;Nantes;;Nantes
 f0846;Napoli;;Napoli
 f0847;Nashville SC;;Nashville SC
 f0848;National Bank Egypt;;
-f0849;Nautico;;Náutico
+f0849;Nautico;;N utico
 f0850;Necaxa;;Necaxa
 f0851;Negele Arsi Ketema;;
 f0852;Neom SC;;
@@ -895,7 +895,7 @@ f0892;Omonia Aradippou;;Omonia Aradippou
 f0893;Operario MS;;
 f0894;Operario VG;;
 f0895;Oran;;
-f0896;Orgryte;;Örgryte
+f0896;Orgryte;; rgryte
 f0897;Orlando City;;Orlando City
 f0898;Osaka;;FC Osaka
 f0899;Osasco Sporting;;
@@ -906,7 +906,7 @@ f0903;Ostrava;;Ostrava
 f0904;Otelul;;
 f0905;Ourense CF;;Ourense CF
 f0906;Oxford Utd;;
-f0907;Oxford Utd W;;Oxford United Ž
+f0907;Oxford Utd W;;Oxford United  
 f0908;Paderborn;;Paderborn
 f0909;Paks;;Paksi
 f0910;Palmeiras;;Palmeiras
@@ -940,10 +940,10 @@ f0937;Piracicaba;;
 f0938;Pitbulls;;
 f0939;Platense;;Platense
 f0940;Plaza Amador;;Plaza Amador
-f0941;Plzen;Plzeò;Plzeò
-f0942;Plzen W;;Plzeò Ž
+f0941;Plzen;Plze ;Plze 
+f0942;Plzen W;;Plze   
 f0943;Podbeskidzie;;
-f0944;Pogon Siedlce;Pogon Siedlce;Pogoò Siedlce
+f0944;Pogon Siedlce;Pogon Siedlce;Pogo  Siedlce
 f0945;Police FC;;
 f0946;Polissya Zhytomyr;;Polissya Zhytomyr
 f0947;Polokwane;;
@@ -956,7 +956,7 @@ f0953;Porto Velho;;Porto Velho
 f0954;Portuguesa;;
 f0955;Portuguesa RJ;;Portuguesa RJ
 f0956;Prachuap;;
-f0957;Preussen Munster;;Münster
+f0957;Preussen Munster;;M nster
 f0958;Primavera;;
 f0959;Pro Patria;;Pro Patria
 f0960;Pro Vercelli;;Pro Vercelli
@@ -1015,9 +1015,9 @@ f1012;Rosario Central;;
 f1013;Rubio Nu;Rubio Nu;Rubio Nu
 f1014;Ruch Chorzow;Ruch Chorzow;
 f1015;Ruthin;;
-f1016;Ruzomberok;;Ružomberok
+f1016;Ruzomberok;;Ru omberok
 f1017;RWDM Brussels;;Daring Brussels
-f1018;S. Rzeszow;;Stal Rzeszów
+f1018;S. Rzeszow;;Stal Rzesz w
 f1019;Sabadell;;Sabadell
 f1020;Sabah Baku;;Sabah FK
 f1021;Safa Baku;;
@@ -1032,7 +1032,7 @@ f1029;San Diego FC;;San Diego FC
 f1030;San Jose Earthquakes;;San Jose
 f1031;San Lorenzo;Sportivo San Lorenzo;Sportivo San Lorenzo
 f1032;San Martin Burzaco;;San Martin Burzaco
-f1033;San Martin S.J.;;San Martín San Juan
+f1033;San Martin S.J.;;San Mart n San Juan
 f1034;San Telmo;;San Telmo
 f1035;Sanfrecce Hiroshima;Sanfrecce Hiroshima;Sanfrecce Hiroshima
 f1036;Sanluqueno;;Sanluqueno
@@ -1069,7 +1069,7 @@ f1066;Shabab Al-Ahli Dubai;;
 f1067;Shabab Al-Ahli Dubai U23;;
 f1068;Shakhtar Donetsk;;Shakhtar Donetsk
 f1069;Shamakhi;;Shamakhi FK
-f1070;Shamrock Rovers;1. FC Koln;1. FC Köln
+f1070;Shamrock Rovers;1. FC Koln;1. FC K ln
 f1071;Sheffield Utd;;Sheffield United
 f1072;Sheffield Wed;;Sheffield Wednesday
 f1073;Sheger Ketema;;
@@ -1080,7 +1080,7 @@ f1077;Sileks;;
 f1078;Silkeborg;;Silkeborg
 f1079;Sion;;Sion
 f1080;Siracusa;;Siracusa
-f1081;Siroki Brijeg;;Široki Brijeg
+f1081;Siroki Brijeg;; iroki Brijeg
 f1082;SJK Akatemia;;SJK Akatemia
 f1083;SK Rapid II;;
 f1084;Slask Wroclaw;;Slask Wroclaw
@@ -1095,7 +1095,7 @@ f1092;Smederevo;;Smederevo
 f1093;Sofapaka;;
 f1094;Sochaux;;Sochaux
 f1095;Solihull Moors;;
-f1096;Soroksar;;Soroksár
+f1096;Soroksar;;Soroks r
 f1097;Sorrento;;Sorrento
 f1098;Southampton U21;;
 f1099;Sp. Luqueno;Sportivo Luqueno;
@@ -1105,7 +1105,7 @@ f1102;Spartak Varna;Spartak Varna;Spartak Varna
 f1103;Sport Huancayo;;Sport Huancayo
 f1104;Sporting CP;;Sporting Lisboa
 f1105;Sporting Cristal;;
-f1106;Sporting FC;;Sporting San José
+f1106;Sporting FC;;Sporting San Jos 
 f1107;Sporting Kansas City;;Kansas
 f1108;Sportivo Italiano;;Sportivo Italiano
 f1109;Sportivo Trinidense;Sportivo Trinidense;
@@ -1116,7 +1116,7 @@ f1113;St. George Willawong;;
 f1114;St. Liege;St. Liege;St. Liege
 f1115;St. Patricks;;
 f1116;St. Pauli;;St. Pauli
-f1117;St. Polten;;St. Pölten
+f1117;St. Polten;;St. P lten
 f1118;Stade Briochin;Stade Briochin;Stade Briochin
 f1119;Stade Renard;;
 f1120;Steaua Bucuresti;;CSA Steaua Bucuresti
@@ -1136,8 +1136,8 @@ f1133;Svay Rieng;;
 f1134;Sydney FC U23;;FC Sydney Youth
 f1135;Sydney Olympic;;Sydney Olympic FC
 f1136;Sydney Utd;;Sydney United 58
-f1137;Szeged;;Szeged-Csanád
-f1138;Szentlorinc;;Szentlörinc
+f1137;Szeged;;Szeged-Csan d
+f1138;Szentlorinc;;Szentl rinc
 f1139;Tahiti United;;
 f1140;Talleres (R.E);;Talleres Remedios de Escalada
 f1141;Tampines;;Tampines
@@ -1154,7 +1154,7 @@ f1151;Thor Akureyri;;
 f1152;Thun;;
 f1153;Tigre;;Tigre
 f1154;Tirol;;WSG Tirol
-f1155;Tiszakecske;;Tiszakécske
+f1155;Tiszakecske;;Tiszak cske
 f1156;Tochigi City;;Tochigi City
 f1157;Tochigi SC;;Tochigi SC
 f1158;Toluca;;Toluca
@@ -1169,12 +1169,12 @@ f1166;Trento;;Trento
 f1167;Triestina;;
 f1168;Trofense;;
 f1169;Truro;;
-f1170;TSC;;TSC Baèka Topola
+f1170;TSC;;TSC Ba ka Topola
 f1171;Twente;;Twente
 f1172;TWL Elektra;;
 f1173;Tzeirey Tamra;;
 f1174;Tzeirey Um El Fahem;;
-f1175;U. Catolica;;Universidad Católica
+f1175;U. Catolica;;Universidad Cat lica
 f1176;U. Cluj;;
 f1177;U. De Concepcion;;Universidad de Concepcion
 f1178;U. Espanola;;
@@ -1188,7 +1188,7 @@ f1185;UNAN-Managua;;
 f1186;Union Cocle;;Union Cocle
 f1187;Union de Santa Fe;;
 f1188;Union Gurten;;
-f1189;Union Titus Petange;;Pétange
+f1189;Union Titus Petange;;P tange
 f1190;Unirea Slobozia;;Unirea Slobozia
 f1191;United FC;;
 f1192;Univ. Craiova;;CS Universitatea Craiova
@@ -1210,24 +1210,24 @@ f1207;Valladolid;;Valladolid
 f1208;Valur;;
 f1209;Van;;
 f1210;Vancouver Whitecaps;;Vancouver
-f1211;Varazdin;;Varaždin
+f1211;Varazdin;;Vara din
 f1212;Varberg;;Varberg FC
-f1213;Varnamo;;Värnamo
+f1213;Varnamo;;V rnamo
 f1214;Vasas;;Vasas
 f1215;Vasco;;Vasco
-f1216;Vasteras SK;;Västeras SK
+f1216;Vasteras SK;;V steras SK
 f1217;Vegalta Sendai;;Vegalta Sendai
 f1218;Velez Mostar;;
-f1219;Velez Sarsfield;;Vélez Sarsfield
-f1220;Venezuela U20 W;;Venezuela Ž-U20
+f1219;Velez Sarsfield;;V lez Sarsfield
+f1220;Venezuela U20 W;;Venezuela  -U20
 f1221;Venlo;;Venlo
 f1222;Veres-Rivne;;Veres Rivne
 f1223;Versailles;;Versailles
 f1224;Viborg;;Viborg
 f1225;Victoria;;
 f1226;Victoria Rosport;;Victoria Rosport
-f1227;Viktoria Koln;;Viktoria Köln
-f1228;Villa Dalmine;;Villa Dálmine
+f1227;Viktoria Koln;;Viktoria K ln
+f1228;Villa Dalmine;;Villa D lmine
 f1229;Villa San Carlos;;Villa San Carlos
 f1230;Villarreal;;Villarreal
 f1231;Villarreal U19;;
@@ -1245,7 +1245,7 @@ f1242;Watford;Watford;Watford
 f1243;WE SC;;
 f1244;Welayta Dicha;;
 f1245;Werder Bremen;;Bremen
-f1246;West Ham W;;West Ham Ž
+f1246;West Ham W;;West Ham  
 f1247;Westerlo;;Westerlo
 f1248;Wexford;Wexford;Wexford
 f1249;Wil;;Wil
@@ -1275,7 +1275,7 @@ f1272;Zalgiris;;
 f1273;Zaragoza;;Zaragoza
 f1274;Zarzis;;
 f1275;Zawisza;;
-f1276;Zeledon;;Zeledón
+f1276;Zeledon;;Zeled n
 f1277;Zeljeznicar;;
 f1278;Zemun;;Zemun
 f1279;Zenit;;
