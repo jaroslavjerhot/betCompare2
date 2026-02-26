@@ -83,7 +83,7 @@ function fProcessText(sName, sText=''){
         case 'tipsport':    lxd = fProcessTipsport(lstText); break;
         case 'allwyn':      lxd = fProcessAllwyn(lstText); break;
     }
-    alert(`V datech od ${sName} bylo zpracováno ${lxd.lenght} týmů.`)
+    alert(`V datech od ${sName} bylo zpracováno ${lxd.length} týmů.`)
     csv = fLxdToCsv(lxd)
     localStorage.setItem(sName + '_Csv', csv)
     return [csv, lxd]
@@ -542,7 +542,7 @@ function fCompareOdds(){
 
 
     })
-    if (fLxdToCsv.length === 0){
+    if (lxdCompared.length === 0){
         alert('K porovnání nebylo nic nalezeno.')
     }else{
         csv = fLxdToCsv(lxdCompared)
