@@ -57,7 +57,7 @@ async function fPasteText(textareaId, sCheckWord, sCheckTrans='') {
     if (sName){
         alert(`Stažený je z ${sName}. Je v něm odhadem ${iMatches} zápasů.`)
     }else{
-        alert('Stažený text nebyl rozpoznán.')
+        alert('Stažený text nebyl rozpoznán. Možná byl automaticky přeložen do češtiny.')
         return
     }
     
