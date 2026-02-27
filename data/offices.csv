@@ -1,5 +1,5 @@
 ﻿sId;sName;sAbb;sColor;sCheckPhrase;sNotPhrase;sMatchCoutnBy;sLinkToday;sLinkTommorow;sLinkDate;sSearchLink;
-1;oddsPortal;oP;yellow;Oddsportal.com;zápas;\n/;https://www.oddsportal.com/matches/football/YYYYMMDD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/YYYYMMDD/;;
+1;oddsPortal;oP;yellow;Oddsportal.com;zápas;#n/;https://www.oddsportal.com/matches/football/YYYYMMDD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/YYYYMMDD/;;
 2;allwyn;aW;cyan;Blog - Allwyn svět;; | ;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TODAY;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TOMORROW;;;
 3;bet-x;bX;darkred;EVONA ELECTRONIC, spol. s r.o.;;.26;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=48;;;;
 4;merkur;mk;darkblue;MerkurXTip a.s.;; | ;https://www.merkurxtip.cz/sazeni#/coupon/66/1;https://www.merkurxtip.cz/sazeni#/coupon/66/2;;;
