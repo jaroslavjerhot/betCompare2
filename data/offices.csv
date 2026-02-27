@@ -1,7 +1,7 @@
-﻿sId;sName;sAbb;sColor;sCheckPhrase;sNotPhrase;sMatchCoutnBy;sLinkToday;sLinkTommorow;sLinkDate;sSearchLink;
-1;oddsPortal;oP;yellow;Oddsportal.com;zápas;#n/;https://www.oddsportal.com/matches/football/YYYYMMDD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/YYYYMMDD/;;
-2;allwyn;aW;cyan;Blog - Allwyn svět;; | ;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TODAY;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TOMORROW;;;
-3;bet-x;bX;darkred;EVONA ELECTRONIC, spol. s r.o.;;.26;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=48;;;;
-4;merkur;mk;darkblue;MerkurXTip a.s.;; | ;https://www.merkurxtip.cz/sazeni#/coupon/66/1;https://www.merkurxtip.cz/sazeni#/coupon/66/2;;;
-5;synot;sn;orange;IČ 26301091;; | ;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=TodayTomorrow&categoryId=12;;;https://sport.synottip.cz/zapasy/0?searchBy=_SSS&categoryId=12;
-6;tipsport;ts;lightblue;Tipsport.net a.s.;; | ;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.today;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.tomorrow;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.chooseDay&dateFrom=_UTC00000&dateTo=_UTC99999;https://www.tipsport.cz/hledani?limit=225&textsFilter=_SSS;
+﻿sId;sName;sAbb;sColor;sCheckPhrase;sNotPhrase;sMatchCountBy;sLinkToday;sLinkTommorow;sLinkDate;sSearchLink;
+1;oddsPortal;Op;yellow;Oddsportal.com;zápas;##n/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/YYYYMMDD/;;
+2;allwyn;Aw;cyan;Blog - Allwyn svět;; | ;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TODAY;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TOMORROW;;;
+3;bet-x;Bx;darkred;EVONA ELECTRONIC, spol. s r.o.;;.26;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=48;;;;
+4;merkur;Mk;darkblue;MerkurXTip a.s.;; | ;https://www.merkurxtip.cz/sazeni#/coupon/66/1;https://www.merkurxtip.cz/sazeni#/coupon/66/2;;;
+5;synot;Sn;orange;IČ 26301091;; | ;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=TodayTomorrow&categoryId=12;;;https://sport.synottip.cz/zapasy/0?searchBy=_SSS&categoryId=12;
+6;tipsport;Ts;lightblue;Tipsport.net a.s.;; | ;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.today;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.tomorrow;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.chooseDay&dateFrom=_UTC00000&dateTo=_UTC99999;https://www.tipsport.cz/hledani?limit=225&textsFilter=_SSS;
