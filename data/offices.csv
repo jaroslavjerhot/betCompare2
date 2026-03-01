@@ -1,8 +1,8 @@
-ï»¿sBoId;sName;sColor;sCheckPhrase;sNotPhrase;sMatchCountBy;sLinkToday;sLinkTomorrow;sLinkDate;sSearchLink
-Op;oddsPortal;yellow/black;Oddsportal.com;zÃ¡pas;##n/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;
-Aw;allwyn;cyan/darkblue;Blog - Allwyn svÄ›t;; | ;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TODAY;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TOMORROW;;
-Bx;bet-x;black/darkred;BETX Club;; / ;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=24;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=48;;
-Fn;fortuna;yellow/black;FORTUNA=LIGA;;.png;https://www.ifortuna.cz/sazeni/fotbal?tab=matches&filter=today;https://www.ifortuna.cz/sazeni/fotbal?tab=matches&filter=tomorrow;;
-Mk;merkur;darkblue/white;MerkurXTip a.s.;; | ;https://www.merkurxtip.cz/sazeni#/coupon/66/1;https://www.merkurxtip.cz/sazeni#/coupon/66/2;;
-Sn;synot;orange/white;IÄŒ 26301091;; | ;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=Today&categoryId=12;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=TodayTomorrow&categoryId=13;;https://sport.synottip.cz/zapasy/0?searchBy=_SSS&categoryId=12
-Ts;tipsport;lightblue/orange;Tipsport.net a.s.;; | ;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.today;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.tomorrow;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.chooseDay&dateFrom=_UTC00000&dateTo=_UTC99999;https://www.tipsport.cz/hledani?limit=225&textsFilter=_SSS
+sBoId;sName;sColor;sCheckPhrase;sNotPhrase;sMatchCountBy;sLinkToday;sLinkTomorrow;sLinkDate;sSearchLink;bUse
+Op;oddsPortal;yellow/black;Oddsportal.com;zápas;##n/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;;x
+Aw;allwyn;cyan/darkblue;Blog - Allwyn svìt;; | ;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TODAY;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TOMORROW;;;x
+Bx;bet-x;black/darkred;BETX Club;; / ;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=24;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=48;;;x
+Fn;fortuna;yellow/black;FORTUNA=LIGA;;.png;https://www.ifortuna.cz/sazeni/fotbal?tab=matches&filter=today;https://www.ifortuna.cz/sazeni/fotbal?tab=matches&filter=tomorrow;;;
+Mk;merkur;darkblue/white;MerkurXTip a.s.;; | ;https://www.merkurxtip.cz/sazeni#/coupon/66/1;https://www.merkurxtip.cz/sazeni#/coupon/66/2;;;
+Sn;synot;orange/white;IÈ 26301091;; | ;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=Today&categoryId=12;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=TodayTomorrow&categoryId=13;;https://sport.synottip.cz/zapasy/0?searchBy=_SSS&categoryId=12;x
+Ts;tipsport;lightblue/orange;Tipsport.net a.s.;; | ;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.today;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.tomorrow;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.chooseDay&dateFrom=_UTC00000&dateTo=_UTC99999;https://www.tipsport.cz/hledani?limit=225&textsFilter=_SSS;x
