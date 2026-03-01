@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
     <meta charset='UTF-8'>
-    <title>Tipsport Text Parser</title>
+    <title>oddsComparator</title>
 
     <!-- Bootstrap 5 CDN -->
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>
@@ -13,60 +13,30 @@
 
 <div class="container py-4">
     <div id="console">xxx</div>
+</div>
+<div id='linksContainer' class="container py-4">
+  <button class='btn btn-secondary me-2' id="btnNextToday" name="sLinkToday">Dnes</button>
+  <button class='btn btn-secondary me-2' id="btnNextTomorrow" name="sLinkTomorrow">Zítra</button>
   <button class='btn btn-secondary me-2' onclick="fCompareOdds()">Porovnej</button>
-    
-  <!-- LEFT PANEL -->
-  <div class="panel">
-    <div class="buttons">
-      <a href="https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.today" target="_blank" class='btn btn-secondary me-2'>Otevři TipSport</a>
-      <button class='btn btn-secondary me-2' onclick="pasteText('txtTipsport', 'Tipsport.net a.s.')">XxxVlož</button>
-      <button class='btn btn-secondary me-2' onclick="processTipsport()">Zpracuj</button>
-      <button class='btn btn-secondary me-2' onclick="clearText('txtTipsport')">Vymaž</button>
-    </div>
-    <textarea id='txtTipsport' readonly></textarea>
-  </div>
+</div> 
 
-  <!-- allwyb -->
-  <div class="panel">
-    <div class="buttons">
-      <a href="https://www.allwyn.cz/kurzove-sazky/kurzy/11" target="_blank" class='btn btn-secondary me-2'>Otevři Allwyn</a>
-      <button class='btn btn-secondary me-2' onclick="pasteText('txtAllwyn','Blog - Allwyn svět')">Vlož</button>
-      <button class='btn btn-secondary me-2' onclick="processAllwyn()">Zpracuj</button>
-      <button class='btn btn-secondary me-2' onclick="clearText('txtAllwyn')">Vymaž</button>
-    </div>
-    <textarea id='txtAllwyn' readonly></textarea>
+<div class="container py-4" id="downloadSelectContainer">
+  <div class="mb-3">
+    <label for="downloadSelect" class="form-label text-light">Vyber formát pro stažení:</label>
+    <select class="form-select" id="downloadSelect">
+      
+    </select>
   </div>
-   <!-- MID PANEL -->
-  <div class="panel">
-    <div class="buttons">
-      <a href="https://www.oddsportal.com/matches/football/" target="_blank" class='btn btn-secondary me-2'>Otevři OddsPortal</a>
-      <button class='btn btn-secondary me-2' onclick="pasteText('txtOddsPortal','Oddsportal.com')">Vlož</button>
-      <button class='btn btn-secondary me-2' onclick="processOddsPortal()">Zpracuj</button>
-      <button class='btn btn-secondary me-2' onclick="clearText('txtOddsPortal')">Vymaž</button>
-    </div>
-    <textarea id='txtOddsPortal' readonly></textarea>
-  </div>
-    <!-- RIGHT PANEL -->
-  <div class="panel">
-    <div class="buttons">
-      <!-- <a href="https://api.the-odds-api.com/v4/sports/upcoming/odds/?regions=eu&markets=h2h&apiKey=8b0f80809ec7a6601c08c5e47abd7eef" target="_blank" class='btn btn-secondary me-2'>Otevři TheOdds</a> -->
-      <a href="https://api.the-odds-api.com/v4/soccer/upcoming/odds/?regions=eu&markets=h2h&apiKey=8b0f80809ec7a6601c08c5e47abd7eef" target="_blank" class='btn btn-secondary me-2'>Otevři TheOdds</a>
-      <button class='btn btn-secondary me-2' onclick="pasteText('txtTheOdds','commence_time')">Vlož</button>
-      <button class='btn btn-secondary me-2' onclick="processTheOdds()">Zpracuj</button>
-      <button class='btn btn-secondary me-2' onclick="clearText('txtTheOdds')">Vymaž</button>
-    </div>
-    <textarea id='txtTheOdds' readonly></textarea>
-  </div>
-  
-  
+<button class='btn btn-secondary me-2' onclick="fShowContentOfLocalStorage(document.getElementById('downloadSelect').value)">Zobrazit obsah</button>
+<button class='btn btn-secondary me-2' onclick="fDownloadFile(document.getElementById('downloadSelect').value)">Stáhnout výsledky</button>
+<button class='btn btn-secondary me-2' onclick="fRemoveLocalStorage(document.getElementById('downloadSelect').value)">Odstranit obsah</button>
+
 
 </div>
 
-  <button class='btn btn-secondary me-2' onclick="processBoth()">Zpracuj oba</button>
+<textarea id="output" rows="20" cols="100"></textarea>
+<div id="tableContainer"></div>
 
-
-<div id='output'></div>
-</div>
 
 <script src='base.js'></script>
 <script src='transTeams.js'></script>

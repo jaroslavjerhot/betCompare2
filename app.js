@@ -3,34 +3,75 @@
 // localStorage.clear()
 
 
+
 let lxdTeams = []
 let lxdNewOpTeams = []
+let lxdBetOffices = []
+
+async function fLoadScrapedData(sName, sLink) {
+    // const urlInput = document.getElementById('scrapeUrl').value; // your input field
+    // const urlInput='https://www.oddsportal.com/matches/football/20260227/'
+    const urlInput = lxdBetOffices.find(d => d.sName === sName)[sLink];
+    alert('Načítá se data ze scrape pro ' + sName + ' z odkazu ' + urlInput)
+    try {
+        // For demo, we always fetch the saved JSON
+        const response = await fetch(urlInput);
+        // const response = await fetch('data.json');
+        const data = await response.json();
+
+        // Optional: check that the URL matches
+        if (data.url !== urlInput) {
+            console.warn(`Requested URL "${urlInput}" differs from scraped URL "${data.url}"`);
+        }
+        localStorage.setItem(sName + '_inText', data.content);
+        alert(`Data scraped from ${urlInput} and saved to localStorage under key "${sName}_inText".`);
+        document.getElementById('output').value = data.content;
+    } catch (err) {
+        alert('Nepodařilo se načíst data ze scrape pro ' + sName + ' z odkazu ' + urlInput)
+        console.error('Could not load scraped data', err);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
-    const csvTeams = await fLoadCsv(sTransTeams)
+    //fLoadScrapedData();
+    const csvOffices = await fLoadCsv(sOffices)
+    lxdBetOffices = fCsvToLxd(csvOffices)
+    //const csvTeams = await fLoadCsv(sTransTeams)
+    const csvTeams = localStorage.getItem('teams_Csv') || await fLoadCsv(sTransTeams)
+    fRenderDownloadSelectBox()
+    fRenderConsole(lxdBetOffices); 
+    // alert(csvTeams.slice(0,100))
     lxdTeams = fCsvToLxd(csvTeams)
-    renderConsole(lxdBetOffices);
+    //localStorage.setItem('teams_Csv', csvTeams)
+    // alert(csvOffices.slice(0,100))
+    
+    
 });
 
+function fRenderDownloadSelectBox() {
+    // alert('Object.keys(localStorage): ' + Object.keys(localStorage)[0])
+    const select = document.getElementById("downloadSelect");
+    const options = Object.keys(localStorage)
+//        .filter(key => key.endsWith('_Csv'))    
+        .sort()
+        options.forEach(option => {
+            const optionElement = document.createElement("option");
+            optionElement.value = option;
+            optionElement.textContent = option;
+            select.appendChild(optionElement);
+        });
+}
 
-const lxdBetOffices = [
-    {'name': 'oddsPortal', 'checkPhrase': 'Oddsportal.com', 'notPhrase': 'zápas', 'matchCountBy': '\n/', 
-        'linkToday': 'https://www.oddsportal.com/matches/football/' + fGetDateFormatted(0,'YYYYMMDD'), 
-        'linkTomorrow':'https://www.oddsportal.com/matches/football/' + fGetDateFormatted(1,'YYYYMMDD')
-    },
-    {'name': 'allwyn', 'checkPhrase': 'Blog - Allwyn svět', 'notPhrase': '', 'matchCountBy': ' | ',
-        'linkToday': 'https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TODAY', 
-        'linkTomorrow':'https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TOMORROW'
-    },
-    {'name': 'tipsport', 'checkPhrase': 'Tipsport.net a.s.', 'notPhrase': '', 'matchCountBy': ' | ',
-        'linkToday': 'https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.today', 
-        'linkTomorrow':'https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.tomorrow'
-    },
-]
+
+
+
+
 const dctDnesZitra = {
-    'Dnes': fGetDateFormatted(0), 'Zítra': fGetDateFormatted(1),
-    'Today': fGetDateFormatted(0), 'Tomorrow': fGetDateFormatted(1),
+    'dnes': fGetDateFormatted(0), 'zítra': fGetDateFormatted(1),
+    'today': fGetDateFormatted(0), 'tomorrow': fGetDateFormatted(1),
 }
 let dctB = []
+
 
 async function fPasteText(textareaId, sCheckWord, sCheckTrans='') {
     let sText = ''
@@ -47,50 +88,80 @@ async function fPasteText(textareaId, sCheckWord, sCheckTrans='') {
     let sName = ''
     let iMatches = 0
     lxdBetOffices.forEach((d, i) => {
-        if (sText.includes(d.checkPhrase) && (d.notPhrase=='' || !sText.includes(d.notPhrase))){
-            sName = d.name
-            iMatches = (sText.length - sText.replaceAll(d.matchCountBy).length) / d.matchCountBy.length
+        if (sText.includes(d.sCheckPhrase) && (d.sNotPhrase=='' || !sText.includes(d.sNotPhrase))){
+            sName = d.sName
+            d.sMatchCountBy = d.sMatchCountBy.replace('##n','\n')
+            //iMatches = (sText.length - sText.replaceAll(d.sMatchCountBy,'').length) / d.sMatchCountBy.length
             //lxdBetOffices[i].iMatches = iMatches
+            
         }
     })
-
+    const iRows = sText.split('\n').length
     if (sName){
-        alert(`Stažený je z ${sName}. Je v něm odhadem ${iMatches} zápasů.`)
+        alert(`Stažený text je z ${sName}. Je v něm ${iRows} řádků.`)
     }else{
         alert('Stažený text nebyl rozpoznán. Možná byl automaticky přeložen do češtiny.')
         return
     }
     
     localStorage.setItem(sName+'_Time', new Date());
-    localStorage.setItem(sName, sText)
+    localStorage.setItem(sName+'_inText', sText)
     
     // [sCsv, dctB[sName]] = fProcessText(sName, sText)
 }
 
-function fProcessText(sName, sText=''){
-    sText = sText || localStorage.getItem(sName);
+function fProcessText(sBoId, sText=''){
+    const sName = lxdBetOffices.find(d => d.sBoId === sBoId).sName || 'All offices'
+    
+    sText = sText || localStorage.getItem(sName + '_inText');
     if (!sText){ 
-        alert(`${sName} není uloženo.`)
+        alert(`${sName+'_inText'} není uloženo.`)
         return(null, null)}
 
     const lstText = sText
         .split('\n')
         .map(l => l.trim())
         .filter(l => l.length >= 0);
-
-    switch (sName){
-        case 'oddsPortal':  lxd = fProcessOddsPortal(lstText); break;
-        case 'tipsport':    lxd = fProcessTipsport(lstText); break;
-        case 'allwyn':      lxd = fProcessAllwyn(lstText); break;
+    
+    // alert(`Zpracovává se ${sName+'_inText'}. V textu je ${lstText.length} řádků.`)
+    let lxdMatches = []
+    let lxdNewTeams = []
+    const sTeamCol = 'sTeam' + sBoId
+    switch (sBoId){
+        case 'Op': case 'xx': [lxdMatches, lxdNewTeams] = fProcessOddsPortal(lstText); break;
+        case 'Aw': case 'xx': [lxdMatches, lxdNewTeams] = fProcessAllwyn(lstText); break;
+        case 'Bx': case 'xx': [lxdMatches, lxdNewTeams] = fProcessBetX(lstText); break;
+        case 'Fn': case 'xx': [lxdMatches, lxdNewTeams] = fProcessFortuna(lstText); break;
+        case 'Mk': case 'xx': [lxdMatches, lxdNewTeams] = fProcessMerkur(lstText); break;
+        case 'Sn': case 'xx': [lxdMatches, lxdNewTeams] = fProcessSynot(lstText); break;
+        case 'Ts': case 'xx': [lxdMatches, lxdNewTeams] = fProcessTipsport(lstText); break;
     }
-    alert(`V datech od ${sName} bylo zpracováno ${lxd.length} týmů.`)
-    csv = fLxdToCsv(lxd)
-    localStorage.setItem(sName + '_Csv', csv)
-    return [csv, lxd]
+    if (lxdNewTeams.length>0){
+        let sFirst5 = lxdNewTeams.slice(0,5).map(d => d[sTeamCol]).join('\n')
+        alert(`V datech od ${sName} bylo nalezeno ${lxdNewTeams.length} nových týmů:\n\n${sFirst5}`)
+        lxdTeams = fInsertNewTeamsToLxd(lxdTeams, lxdNewTeams, sTeamCol)
+        fLxdToLocalStorage(lxdTeams, 'teams_Csv', [sTeamCol])
+    } else {
+        alert(`V datech od ${sName} nebyly nalezeny žádné nové týmy.`)
+    }
+    if (lxdMatches.length>0){  
+        alert(`V datech od ${sName} bylo zpracováno ${lxdMatches.length} zápasů.`)
+        fLxdToLocalStorage(lxdMatches, sName+'_Matches')
+    } else {
+        alert(`V datech od ${sName} nebyly nalezeny žádné zápasy.`)
+    }
 }
 
+function fLxdFromLocalStorage(sKey) {
+    const csv = localStorage.getItem(sKey)
+    return fCsvToLxd(csv)
+}
+function fLxdToLocalStorage(lxd, sKey, lstExtra=[]) {
+    const csv = fLxdToCsv(lxd, lstExtra)
+    localStorage.setItem(sKey, csv)
+}
 
-function renderConsole(lxd) {
+function fRenderConsole(lxd) {
   const container = document.getElementById("console");
   
   let html = `<table class="table table-striped table-bordered">
@@ -101,6 +172,7 @@ function renderConsole(lxd) {
         <th>Age</th>
         <th>Počet</th>
         <th>Paste</th>
+        <th>Get Inner</th>
         <th>Process</th>
         <th>Download</th>
       </tr>
@@ -114,29 +186,36 @@ function renderConsole(lxd) {
     
     if (sText){
         //[sAge, iAgeS] = getItemAge(dct.name)
-        iMatches = (sText.length - sText.replaceAll(dct.matchCountBy,'').length) / dct.matchCountBy.length
+        iMatches = (sText.length - sText.replaceAll(dct.sMatchCountBy,'').length) / dct.sMatchCountBy.length
     } else {
         iMatches = 0
     }       
     // const age = Math.floor((Date.now() - new Date(dct.date).getTime()) / 1000);
     const ageClass = iAgeS > 3600 ? "age-old" : ""; // older than 1h → red
+    dct.sLinkToday = fGetDateFormatted(dateDiff = 0, dct.sLinkToday)
+    dct.sLinkTomorrow = fGetDateFormatted(dateDiff = 1, dct.sLinkTomorrow)
 
-    htmlLinkToday = dct.linkToday ? `<a href="${dct.linkToday}" target="_blank" class="btn btn-primary btn-sm btn-link">Dnes</a>` : ''
-    htmlLinkTomorrow = dct.linkTomorrow ? `<a href="${dct.linkTomorrow}" target="_blank" class="btn btn-primary btn-sm btn-link">Zítra</a>` : ''
+    htmlLinkToday = dct.sLinkToday ? `<a href="${dct.sLinkToday}" target="_blank" class="btn btn-primary btn-sm btn-link">Dnes</a>` : ''
+    htmlLinkTomorrow = dct.sLinkTomorrow ? `<a href="${dct.sLinkTomorrow}" target="_blank" class="btn btn-primary btn-sm btn-link">Zítra</a>` : ''
+    htmlLinkDate = dct.sLinkDate ? `<a href="${dct.sLinkDate}" target="_blank" class="btn btn-primary btn-sm btn-link">Datum</a>` : ''
         
     html += `<tr>
-      <td>${dct.name ?? ""}</td>
+      <td>${dct.sName ?? ""}</td>
       <td>
       ${htmlLinkToday}
       ${htmlLinkTomorrow}
-      
+      ${htmlLinkDate}
       </td>
       <td class="${ageClass}">${sAge}</td>
       <td>${iMatches} zápasů</td>
-      <td><button class="btn btn-success btn-sm" onclick="fPasteText('${dct.name}')">Paste</button></td>
-      <td><button class="btn btn-warning btn-sm" onclick="fProcessText('${dct.name}')">Process</button></td>
-      <td><button class="btn btn-warning btn-sm" onclick="fDownloadFile('${dct.name}')">Download</button></td>
+      <td><button class="btn btn-success btn-sm" onclick="fPasteText()">Paste</button></td>
+      <td><button class="btn btn-warning btn-sm" onclick="fProcessText('${dct.sBoId}')">Process</button></td>
+      <td><button class="btn btn-warning btn-sm" onclick="fLoadScrapedData('${dct.sName}','sLinkTomorrow')">Scrape tomorrow</button></td>
+      <td><button class="btn btn-warning btn-sm" onclick="fLoadScrapedData('${dct.sName}','sLinkToday')">Scrape today    </button></td>
+      <td><button class="btn btn-warning btn-sm" onclick="fProcessText('${dct.sName}')">Process</button></td>
+      <td><button class="btn btn-warning btn-sm" onclick="fDownloadFile('${dct.sName}')">Download</button></td>
     </tr>`;
+    x=0
   });
 
   html += "</tbody></table>";
@@ -164,21 +243,39 @@ function clearTextsmazat(textareaId) {
     localStorage.removeItem(textareaId)
 }
 
+
 function isDecimalOdd(text) {
     return /^\s*\d+\.\d+\s*$/.test(text);
 }
-function fGetDateFormatted(dateDiff = 0, sFormat) {
+function fGetDateFormatted(dateDiff = 0, sFormat='dd.mm.yyyy') {
     const today = new Date();
     
     // Add dateDiff days
     today.setDate(today.getDate() + dateDiff);
     
+    const sec = String(today.getSeconds()).padStart(2, '0');
+    const min = String(today.getMinutes()).padStart(2, '0');
+    const hour = String(today.getHours()).padStart(2, '0'); 
+    
     const day = String(today.getDate()).padStart(2, '0');
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const year4 = String(today.getFullYear()); 
     const year2 = year4.slice(-2)
+    sFormat = sFormat.toLowerCase()
+    if (sFormat.includes('_utc')){
+        utcSeconds = (Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())/1000).toString().slice(0, -3)
+        return sFormat.replace('_utc', utcSeconds)
+    }
+    if (sFormat.includes('_y')){
+        return sFormat
+            .replace('_dd', `${day}`).replace('_mm', `${month}`).replace('_yyyy', `${year4}`).replace('_yy', `${year2}`)
+            .replace('_hh', `${hour}`).replace('_mn', `${min}`).replace('_ss', `${sec}`)
+    }
     
-    if (sFormat) return sFormat.toLowerCase().replace('dd', `${day}`).replace('mm', `${month}`).replace('yyyy', `${year4}`).replace('yy', `${year2}`)
+    if (sFormat) 
+        return sFormat
+        .replace('dd', `${day}`).replace('mm', `${month}`).replace('yyyy', `${year4}`).replace('yy', `${year2}`)
+        .replace('hh', `${hour}`).replace('mn', `${min}`).replace('ss', `${sec}`);
     return `${day}.${month}.${year4}`;
 }
 
@@ -214,8 +311,8 @@ function createTimestamp(dateStr, timeStr) {
 function fProcessTipsport(lines) {
     let sLeague = ''
     let lxd = []
-    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Csv'))
-    let lxdNewTsTeams = []
+    let lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Matches'))
+    let lxdNewTeams = []
     let lstSports=['Fotbal']
     lstSports = lstSports.map(v => ', ' + v);
 
@@ -234,7 +331,7 @@ function fProcessTipsport(lines) {
             isDecimalOdd(lines[i+6]) &&
             isDecimalOdd(lines[i+7])) {
 
-            let match = {};
+            let match = {'sBoId': 'Ts'};
             match.sId = ''
             match.sSport = sSport;
             match.sCountry = ''
@@ -250,7 +347,7 @@ function fProcessTipsport(lines) {
                 // match.date = match.date.text.replace(/ /g, ''); // vymaze mezery z datumu
                 match.sDate = match.sDate.replaceAll(' ', ''); // vymaze mezery z datumu
             }else{
-                match.sDate = dctDnesZitra[match.sDate]
+                match.sDate = dctDnesZitra[match.sDate.toLowerCase()]
             }
             
             match.sTs = createTimestamp(match.sDate, match.sTime)
@@ -263,43 +360,9 @@ function fProcessTipsport(lines) {
             if (match.sTeam1.includes('PAOK')){
                 x=0
             }
-            // hleda se v teams v TS
-            match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sTsTeam', match.sTeam1, 'sId') || ''
-            match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sTsTeam', match.sTeam2, 'sId') || ''
-            // hleda se v teams v OP
-            if (!match.sTeam1Id){
-                match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam1, 'sId') || ''
-                // byly nalezeny v op
-                if (match.sTeam1Id) lxdNewTsTeams.push({'sDescr':'stejny nazev jako v oddPortal', 'sId': match.sTeam1Id, 'sOpTeam': match.sTeam1, 'sTsTeam': match.sTeam1})
-            }
-            // hleda se v teams v OP
-            if (!match.sTeam2Id){
-                match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam2, 'sId') || ''
-                // byly nalezeny v op
-                if (match.sTeam2Id) lxdNewTsTeams.push({'sDescr':'stejny nazev jako v oddPortal', 'sId': match.sTeam2Id, 'sOpTeam': match.sTeam2, 'sTsTeam': match.sTeam2})
-            }
-            // team1 nalezen, team2 ne
-            if (match.sTeam1Id && !match.sTeam2Id){
-                dctOp = fGetValByKeyFromLxd(lxdOddsPortal,'sTeam1Id',match.sTeam1Id,'dct')
-                if (dctOp){
-                    lxdNewTsTeams.push({'sDescr':'doplneny team2', 'sId': dctOp.sTeam2Id, 'sOpTeam': dctOp.sTeam2, 'sTsTeam': match.sTeam2})
-                    match.sTeam2Id = dctOp.sTeam2Id
-                }
-            }
-            // team2 nalezen, team1 ne
-            if (!match.sTeam1Id && match.sTeam2Id){
-                dctOp = fGetValByKeyFromLxd(lxdOddsPortal,'sTeam2Id',match.sTeam2Id,'dct')
-                if (dctOp){
-                    lxdNewTsTeams.push({'sDescr':'doplneny team1', 'sId': dctOp.sTeam1Id, 'sOpTeam': dctOp.sTeam1, 'sTsTeam': match.sTeam1})
-                    match.sTeam1Id = dctOp.sTeam1Id
-                }
-            }
-            if (match.sTeam1Id && match.sTeam2Id){
-                match.sId = fGetDateFormatted(0,'yymmdd') + '-' + 
-                    match.sTeam1Id + '-' + match.sTeam2Id
-            }
-            //if (!match.sTeam2Id) lxdNewOpTeams.push({'sName':'op', 'sTeam': match.sTeam2})
             
+            fIdentifyIdByTeams(lxdTeams, lxdNewTeams, lxdOddsPortal, 'sTeamTs', match)
+
             if (lines[i+3] * lines[i+5] * lines[i+7] > 0){
                 match.iMargin = 1/lines[i+3] + 1/lines[i+5] + 1/lines[i+7]
             }
@@ -313,17 +376,11 @@ function fProcessTipsport(lines) {
             lxd.push(match);
             i += 7;
 
+
         }
     }
-    if (lxdNewTsTeams.length>0){
-        const csv = fLxdToCsv(lxdNewTsTeams)        
-        fDownloadFile('', csv, 'newTsteams.csv')
-    } else {
-        alert('Nebyly nalezeny žádné nové týmy.')
-    }
 
-    //localStorage.setItem('tipsport_Csv',fLxdToCsv(lxd))
-    return lxd
+    return [lxd, lxdNewTeams];
 
 };
 
@@ -332,7 +389,9 @@ function fProcessOddsPortal(lines) {
     
     let sLeague = ''
     let lxd = []
-
+    let lxdNewOpTeams = []
+    let sNextIdForTeam = fGetNextIdForTeam(lxdTeams)
+    
     let lstSports=['Football']
     const reTime = /^([0-1]?\d|2[0-3]):[0-5]\d$/;
     
@@ -343,17 +402,17 @@ function fProcessOddsPortal(lines) {
             sLeague = lines[i+6]
             i+=5
         } else if (lines[i].includes('Today,') && lines[i+1]=='1'){
-            sDate = dctDnesZitra.Today
+            sDate = dctDnesZitra.today
             i+=3
         } else if (lines[i].includes('Tomorrow,') && lines[i+1]=='1'){
-            sDate = dctDnesZitra.Tomorrow
+            sDate = dctDnesZitra.tomorrow
             i+=3
         } else if (reTime.test(lines[i]) && lines[i+1]==''){
             sTime = lines[i]
             sTs = createTimestamp(sDate, sTime)
         } else if (lines[i]!='' & lines[i]===lines[i+1] && lines[i+2]==='' && lines[i+3]==='–' && lines[i+4]===lines[i+5] &&
             isDecimalOdd(lines[i+7]) && isDecimalOdd(lines[i+9]) &&isDecimalOdd(lines[i+11])){
-            let match = {};
+            let match = {'sBoId': 'Op'};
             match.sId = '' 
             match.sSport = sSport;
             match.sCountry = sCountry;
@@ -370,21 +429,22 @@ function fProcessOddsPortal(lines) {
             if (match.sTeam1.includes('Guara')){
                 x=0
             }
-            match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam1, 'sId') || ''
-            match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam2, 'sId') || ''
+            match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sTeamOp', match.sTeam1, 'sId') || ''
+            match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sTeamOp', match.sTeam2, 'sId') || ''
             
-            if (!match.sTeam1Id) lxdNewOpTeams.push({'sName':'op', 'sTeam': match.sTeam1})
-            if (!match.sTeam2Id) lxdNewOpTeams.push({'sName':'op', 'sTeam': match.sTeam2})
+            if (!match.sTeam1Id) {
+                match.sTeam1Id = sNextIdForTeam
+                lxdNewOpTeams.push({'sId': sNextIdForTeam, 'sTeamOp': match.sTeam1})}
+                sNextIdForTeam = fIncrementId(sNextIdForTeam, 1)
+            if (!match.sTeam2Id) {
+                match.sTeam2Id = sNextIdForTeam
+                lxdNewOpTeams.push({'sId': sNextIdForTeam, 'sTeamOp': match.sTeam2})}
+                sNextIdForTeam = fIncrementId(sNextIdForTeam, 1)
                 
-            // match.sTeam1Id = dctTeamsId[match.sTeam1] || ''
-            // match.sTeam2Id = dctTeamsId[match.sTeam2] || ''
-
-            match.sId = fGetDateFormatted(0,'yymmdd') + '-' + 
+            match.sId = match.sTs.slice(2,10).replaceAll('-', '') + '-' + 
                 match.sTeam1Id + '-' + match.sTeam2Id
         
-            // match.team1TS = dctTransTeams[match.team1]
-            // match.team2TS = dctTransTeams[match.team2]
-            
+           
             match.iMargin = 0
             if (lines[i+7]*lines[i+9]*lines[i+11]>0){
                 match.iMargin = (1/lines[i+7] + 1/lines[i+9]+ 1/lines[i+11])
@@ -398,33 +458,54 @@ function fProcessOddsPortal(lines) {
         }
     }
     
-    if (lxdNewOpTeams.length>0){
-        const csv = fLxdToCsv(lxdNewOpTeams)        
-        fDownloadFile('', csv, 'newOPteams.csv')
-    } else {
-        alert('Nebyly nalezeny žádné nové týmy.')
-    }
-    
-    //localStorage.setItem('oddsPortal_Csv',fLxdToCsv(lxd))
-    return lxd
+    return [lxd, lxdNewOpTeams];
 };
+
+function fGetNextIdForTeam(lxd){
+    const sIdPrefix = 'f'
+
+    const maxId = lxd.reduce((max, obj) => {
+        const idNum = parseInt(obj.sId.slice(1, 10), 10);
+        return Math.max(max, isNaN(idNum) ? 0 : idNum);
+    }, 0);
+
+    return sIdPrefix + (maxId + 1).toString().padStart(4, '0');
+}
+
+function fIncrementId(sId, increment=1){
+    const sIdPrefix = sId.slice(0, -4)
+    const idNum = parseInt(sId.slice(-4), 10);  
+    const newIdNum = idNum + increment;
+    return sIdPrefix + newIdNum.toString().padStart(4, '0');
+}
+
+function fAppendLxd(lxd, lxdToAppend){
+    const sIdPrefix = lxd[0].sId.slice(0, -4);
+    const maxId = lxd.reduce((max, obj) => Math.max(max, parseInt(obj.sId.slice(1), 10)), 0);
+    lxdToAppend.forEach((obj, index) => {
+        obj.sId = sIdPrefix + (maxId + index + 1).toString().padStart(4, '0');
+        lxd.push(obj);
+     });
+     return lxd}
+
 function fProcessAllwyn(lines) {
     let lxd = []
-    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Csv'))
+    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Matches'))
     
     let lstDays=['Dnes | ', 'Zítra | ']
-    let lxdNewAwTeams = []
-    
+    let lxdNewTeams = []
+    const sBoId = 'Aw'
+    let sTeamCol = 'sTeamAw'
     for (let i = 0; i < lines.length; i++) {
         if  (lines[i].includes(' - ') && lstDays.some(word => lines[i+1].includes(word)) && 
             lines[i+3].startsWith('+') &&
             isDecimalOdd(lines[i+5]) && isDecimalOdd(lines[i+9]) &&isDecimalOdd(lines[i+13])) {
-            let match = {};
+            let match = {'sBoId':  sBoId};
             match.sId = ''
             match.sSport = 'Fotbal';
             match.sDate = lines[i+1].split(' | ')[0]
             match.sTime = lines[i+1].split(' | ')[1]
-            match.sDate = dctDnesZitra[match.sDate]
+            match.sDate = dctDnesZitra[match.sDate.toLowerCase()]
             match.sTs = createTimestamp(match.sDate, match.sTime)
             
             match.sTeam1Id = ''
@@ -436,42 +517,9 @@ function fProcessAllwyn(lines) {
             if (match.sTeam1.includes('Stras')){
                 x=0
             }
-            // hleda se v teams v TS
-            match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sAwTeam', match.sTeam1, 'sId') || ''
-            match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sAwTeam', match.sTeam2, 'sId') || ''
-            // hleda se v teams v OP
-            if (!match.sTeam1Id){
-                match.sTeam1Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam1, 'sId') || ''
-                // byly nalezeny v op
-                if (match.sTeam1Id) lxdNewAwTeams.push({'sDescr':'stejny nazev jako v oddPortal', 'sId': match.sTeam1Id, 'sOpTeam': match.sTeam1, 'sAwTeam': match.sTeam1})
-            }
-            // hleda se v teams v OP
-            if (!match.sTeam2Id){
-                match.sTeam2Id = fGetValByKeyFromLxd(lxdTeams, 'sOpTeam', match.sTeam2, 'sId') || ''
-                // byly nalezeny v op
-                if (match.sTeam2Id) lxdNewAwTeams.push({'sDescr':'stejny nazev jako v oddPortal', 'sId': match.sTeam2Id, 'sOpTeam': match.sTeam2, 'sAwTeam': match.sTeam2})
-            }
-            // team1 nalezen, team2 ne
-            if (match.sTeam1Id && !match.sTeam2Id){
-                dctOp = fGetValByKeyFromLxd(lxdOddsPortal,'sTeam1Id',match.sTeam1Id,'dct')
-                if (dctOp){
-                    lxdNewAwTeams.push({'sDescr':'doplneny team2', 'sId': dctOp.sTeam2Id, 'sOpTeam': dctOp.sTeam2, 'sAwTeam': match.sTeam2})
-                    match.sTeam2Id = dctOp.sTeam2Id
-                }
-            }
-            // team2 nalezen, team1 ne
-            if (!match.sTeam1Id && match.sTeam2Id){
-                dctOp = fGetValByKeyFromLxd(lxdOddsPortal,'sTeam2Id',match.sTeam2Id,'dct')
-                if (dctOp){
-                    lxdNewAwTeams.push({'sDescr':'doplneny team1', 'sId': dctOp.sTeam1Id, 'sOpTeam': dctOp.sTeam1, 'sAwTeam': match.sTeam1})
-                    match.sTeam1Id = dctOp.sTeam1Id
-                }
-            }
-            if (match.sTeam1Id && match.sTeam2Id){
-                match.sId = fGetDateFormatted(0,'yymmdd') + '-' + 
-                    match.sTeam1Id + '-' + match.sTeam2Id
-            }
-            
+
+            fIdentifyIdByTeams(lxdTeams, lxdNewTeams, lxdOddsPortal, sTeamCol, match)
+
             
             match.iMargin = 0
             if (lines[i+5]*lines[i+9]*lines[i+13]>0){
@@ -486,70 +534,336 @@ function fProcessAllwyn(lines) {
             i += 13;
         }
     }
-   if (lxdNewAwTeams.length>0){
-        const csv = fLxdToCsv(lxdNewAwTeams)        
-        fDownloadFile('', csv, 'newAwteams.csv')
-    } else {
-        alert('Nebyly nalezeny žádné nové týmy.')
+    return [lxd, lxdNewTeams];
+};
+
+function fProcessBetX(lines) {
+    let lxd = []
+    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Matches'))
+    const reTime= fCreateDateTimeRegex('hh:mn')
+    const reDate= fCreateDateTimeRegex('dd.mm.yy')
+    
+    let lxdNewTeams = []
+    const sBoId = 'Bx'
+    let sTeamCol = 'sTeam'+sBoId
+    for (let i = 0; i < lines.length; i++) {
+        if  (lines[i].includes(' / ') && lines[i+1]==='1' && lines[i+2]==='X' && lines[i+3]==='2'){
+            sCountry = lines[i].split(' / ')[0]
+            sLeague = lines[i].split(' / ')[1]
+            i+=6    
+        }
+        else if (reDate.test(lines[i]) && reTime.test(lines[i+1])){
+            let match = {'sBoId':  sBoId};
+            match.sId = ''
+            match.sSport = 'Fotbal';
+            match.sDate = lines[i].slice(0, 6) + '20' + lines[i].slice(6)
+            match.sTime = lines[i+1]
+            match.sTs = createTimestamp(match.sDate, match.sTime)
+
+            match.sTeam1Id = ''
+            match.sTeam1 = lines[i+2]
+            match.sTeam2Id = ''
+            match.sTeam2 = lines[i+3]
+
+            if (match.sTeam1.includes('Stras')){
+                x=0
+            }
+
+            fIdentifyIdByTeams(lxdTeams, lxdNewTeams, lxdOddsPortal, sTeamCol, match)
+            
+            match.iMargin = 0
+            
+            match.iOdd1 = Number(lines[i+4].replace(',','.'))
+            match.iOddX = Number(lines[i+5].replace(',','.'))
+            match.iOdd2 = Number(lines[i+6].replace(',','.'))
+
+            if (match.iOdd1*match.iOddX*match.iOdd2>0){
+                match.iMargin = (1/match.iOdd1 + 1/match.iOddX + 1/match.iOdd2)
+            }
+
+            lxd.push(match);
+            i += 10;
+        }
+            
+        }
+    return [lxd, lxdNewTeams];
+};
+
+function fProcessFortuna(lines) {
+    let lxd = []
+    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Matches'))
+    // const reTime= fCreateDateTimeRegex('hh:mn')
+    // const reDate= fCreateDateTimeRegex('dd.mm.yy')
+    let lstDays=['dnes', 'zítra']
+    let lxdNewTeams = []
+    const sBoId = 'Fn'
+    let sTeamCol = 'sTeam'+sBoId
+    for (let i = 0; i < lines.length; i++) {
+        if  (lines[i]==='ufo-sprt-00.png'){
+            sCountry = ''
+            sLeague = lines[i+1]
+            i+=3
+        }
+        else if (lstDays.some(word => lines[i].includes(word))){
+            sDate = dctDnesZitra[lines[i].split(' ')[0].toLowerCase()]
+            sTime = lines[i].split(' ')[1]
+            i+=2
+        }
+        else if (lines[i].startsWith('Výsledek zápasu')){
+            let match = {'sBoId':  sBoId};
+            match.sId = ''
+            match.sSport = 'Fotbal';
+            match.sDate = sDate
+            match.sTime = sTime
+            match.sTs = createTimestamp(match.sDate, match.sTime)
+
+            match.sTeam1Id = ''
+            match.sTeam1 = lines[i+1]
+            match.sTeam2Id = ''
+            match.sTeam2 = lines[i+5]
+
+            if (match.sTeam1.includes('Stras')){
+                x=0
+            }
+
+            fIdentifyIdByTeams(lxdTeams, lxdNewTeams, lxdOddsPortal, sTeamCol, match)
+            
+            match.iMargin = 0
+            
+            match.iOdd1 = Number(lines[i+2])
+            match.iOddX = Number(lines[i+4])
+            match.iOdd2 = Number(lines[i+6])
+
+            if (match.iOdd1*match.iOddX*match.iOdd2>0){
+                match.iMargin = (1/match.iOdd1 + 1/match.iOddX + 1/match.iOdd2)
+            }
+
+            lxd.push(match);
+            i += 18;
+        }
+            
+        }
+    return [lxd, lxdNewTeams];
+};
+
+function fProcessMerkur(lines) {
+    return [[], []];
+};
+
+function fProcessSynot(lines) {
+    let lxd = []
+    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Matches'))
+    const reTime= fCreateDateTimeRegex('hh:mn')
+    const reDate= fCreateDateTimeRegex('dd.mm.yy')
+    let lstDays=['dnes', 'zítra']
+    lstSports=['Fotbal']
+    let lxdNewTeams = []
+    const sBoId = 'Sn'
+    let sTeamCol = 'sTeam'+sBoId
+    for (let i = 0; i < lines.length; i++) {
+        if  (lstSports.some(word => lines[i].includes(word)) && lines[i+1]==='|' && lines[i+2].includes(' / ')==='Fotbal'){
+            sCountry = lines[i+2].split(' / ')[0]
+            sLeague = lines[i+2].split(' / ')[1]
+            i+=2
+        }
+        else if (lines[i].includes(' - ') && reDate.test(lines[i+1]) && reTime.test(lines[i+2])){
+            let match = {'sBoId':  sBoId};
+            match.sId = ''
+            match.sSport = 'Fotbal';
+            match.sDate = lines[i+1].slice(0, 6) + '20' + lines[i+1].slice(6)
+            match.sTime = lines[i+2]
+            match.sTs = createTimestamp(match.sDate, match.sTime)
+
+            match.sTeam1Id = ''
+            match.sTeam1 = lines[i+3]
+            match.sTeam2Id = ''
+            match.sTeam2 = lines[i+7]
+
+            if (match.sTeam1.includes('Stras')){
+                x=0
+            }
+
+            fIdentifyIdByTeams(lxdTeams, lxdNewTeams, lxdOddsPortal, sTeamCol, match)
+            
+            match.iMargin = 0
+            
+            match.iOdd1 = Number(lines[i+4])
+            match.iOddX = Number(lines[i+6])
+            match.iOdd2 = Number(lines[i+8])
+
+            if (match.iOdd1*match.iOddX*match.iOdd2>0){
+                match.iMargin = (1/match.iOdd1 + 1/match.iOddX + 1/match.iOdd2)
+            }
+
+            lxd.push(match);
+            i += 9;
+        }
+            
+        }
+    return [lxd, lxdNewTeams];
+};
+
+function fIdentifyIdByTeams(lxdTeams, lxdNewTeams, lxdOddsPortal, sTeamCol, match){
+    let dctNewTeam = null
+    let dct1 = lxdTeams.find(d => d[sTeamCol] === match.sTeam1)
+    match.sTeam1Id = dct1 ? dct1.sId : ''
+    if (!dct1) {
+        dct1 = fFindInWholeLxd(lxdTeams, match.sTeam1)
+        if (dct1){
+            match.sTeam1Id = dct1.sId
+            dctNewTeam = {'sDescr':'nalezen v teams1', 'sId': dct1.sId, 'sTeamOp': dct1.sTeamOp}
+            dctNewTeam[sTeamCol] = match.sTeam1
+        }
+    }
+    let dct2 = lxdTeams.find(d => d[sTeamCol] === match.sTeam2)
+    match.sTeam2Id = dct2 ? dct2.sId : ''
+    if (!dct2) {
+        dct2 = fFindInWholeLxd(lxdTeams, match.sTeam2)
+        if (dct2){
+            match.sTeam2Id = dct2.sId
+            dctNewTeam = {'sDescr':'nalezen v teams2', 'sId': dct2.sId, 'sTeamOp': dct2.sTeamOp}
+            dctNewTeam[sTeamCol] = match.sTeam2
+        }
     }
 
-    //localStorage.setItem('oddsPortal_Csv',fLxdToCsv(lxd))
+    if (!dct1 && dct2){
+        dct1 = lxdOddsPortal.find(d => d.sTeam2Id === match.sTeam2Id)
+        if (dct1){
+            match.sTeam1Id = dct1.sTeam1Id
+            dctNewTeam = {'sDescr':'nalezen v zapasech dle team2', 'sId': match.sTeam1Id, 'sTeamOp': dct1.sTeam1}
+            dctNewTeam[sTeamCol] = match.sTeam1
+        }
+    }
+    if (!dct2 && dct1){
+        dct2 = lxdOddsPortal.find(d => d.sTeam1Id === match.sTeam1Id)
+        if (dct2){
+            match.sTeam2Id = dct2.sTeam2Id
+            dctNewTeam = {'sDescr':'nalezen v zapasech dle team1', 'sId': match.sTeam2Id, 'sTeamOp': dct2.sTeam2}
+            dctNewTeam[sTeamCol] = match.sTeam2
+        }
+    }
+    if (dctNewTeam) lxdNewTeams.push(dctNewTeam)
+    match.sTeam1Id = dct1 ? dct1.sId : ''
+    match.sTeam2Id = dct2 ? dct2.sId : ''
+    
+    if (match.sTeam1Id && match.sTeam2Id){
+        match.sId = match.sTs.slice(2,10).replaceAll('-', '') + '-' + 
+            match.sTeam1Id + '-' + match.sTeam2Id
+    }
+}
+function fInsertNewTeamsToLxd(lxd, lxdNewTeams, sTeamCol){
+    if (sTeamCol === 'sTeamOp'){
+        lxdNewTeams.forEach(dctNew => {
+                lxd.push(dctNew)
+        })
     return lxd
-};
+    }
+    lxdNewTeams.forEach(dctNew => {
+        dctExisting = lxd.find(d => d.sId === dctNew.sId)
+        if (dctExisting){
+            dctExisting[sTeamCol] = dctNew[sTeamCol]
+            x=0
+        }
+    })
+    return lxd
+}
 function fCompareOdds(){
-    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Csv'))
-    const lxdTs = fCsvToLxd(localStorage.getItem('tipsport_Csv'))
-    const lxdAw = fCsvToLxd(localStorage.getItem('allwyn_Csv'))
+    const iTresh = 0.98
+    const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Matches'))
+    let lxdOther = []
+    lxdBetOffices.forEach(d => {
+        if (d.sName != 'oddsPortal' && localStorage.getItem(d.sName + '_Matches')){
+            lxd = fCsvToLxd(localStorage.getItem(d.sName + '_Matches'))
+            lxdOther = lxdOther.concat(lxd)
+        }
+    })
+
     lxdCompared = []
 
     lxdOddsPortal.forEach(dctOp =>{
         sId = dctOp.sId
-        dctTs = fGetValByKeyFromLxd(lxdTs, 'sId', sId, sValName='dct')
-        dctAw = fGetValByKeyFromLxd(lxdAw, 'sId', sId, sValName='dct')
-        dctOdd1 = {}
-        dctOddX = {}
-        dctOdd2 = {}
-        sFound = ''
-        if (dctTs){
-            dctOdd1['ts'] = dctTs.iOdd1
-            dctOddX['ts'] = dctTs.iOddX
-            dctOdd2['ts'] = dctTs.iOdd2
-            sFound +='tipsport, '
-        }
-        if (dctAw){
-            dctOdd1['aw'] = dctAw.iOdd1
-            dctOddX['aw'] = dctAw.iOddX
-            dctOdd2['aw'] = dctAw.iOdd2
-            sFound +='allwyn, '
-        }
-        if (dctTs || dctAw){
-            [dctOp.srcMaxOdd1, dctOp.iMaxOdd1] = Object.entries(dctOdd1)
-                .reduce((max, current) => current[1] > max[1] ? current : max);
-            [dctOp.srcMaxOddX, dctOp.iMaxOddX] = Object.entries(dctOddX)
-                .reduce((max, current) => current[1] > max[1] ? current : max);
-            [dctOp.srcMaxOdd2, dctOp.iMaxOdd2] = Object.entries(dctOdd2)
-                .reduce((max, current) => current[1] > max[1] ? current : max);
+        let lxdFound = []
+        // lxdFound.push(dctOp)
+        lxdBetOffices.forEach(d => {
+            const dctFound = lxdOther.find(dct => dct.sId === sId && dct.sBoId === d.sBoId)
+            if (dctFound){
+                lxdFound.push(dctFound)
+            }   
+        })
+
+        if (lxdFound.length > 0){
+            const dctMaxOdd1 = fFindMaxByKey(lxdFound, 'iOdd1')
+            const dctMaxOddX = fFindMaxByKey(lxdFound, 'iOddX')
+            const dctMaxOdd2 = fFindMaxByKey(lxdFound, 'iOdd2')
+
+            dctOp.sBOMaxOdd1 = dctMaxOdd1 ? dctMaxOdd1.sBoId : ''
+            dctOp.sColorMaxOdd1 = dctMaxOdd1 ? dctMaxOdd1.sColor : ''
+            dctOp.iMaxOdd1 = dctMaxOdd1 ? dctMaxOdd1.iOdd1 : 0
             
-            dctOp.iRate1 = dctOp.iMaxOdd1/dctOp.iNormOdd1
-            dctOp.iRateX = dctOp.iMaxOddX/dctOp.iNormOddX
-            dctOp.iRate2 = dctOp.iMaxOdd2/dctOp.iNormOdd2
+            dctOp.sBOMaxOddX = dctMaxOddX ? dctMaxOddX.sBoId : ''
+            dctOp.sColorMaxOddX = dctMaxOddX ? dctMaxOddX.sColor : ''
+            dctOp.iMaxOddX = dctMaxOddX ? dctMaxOddX.iOddX : 0
+            
+            dctOp.sBOMaxOdd2 = dctMaxOdd2 ? dctMaxOdd2.sBoId : ''
+            dctOp.sColorMaxOdd2 = dctMaxOdd2 ? dctMaxOdd2.sColor : ''
+            dctOp.iMaxOdd2 = dctMaxOdd2 ? dctMaxOdd2.iOdd2 : 0
+
             dctOp.iMargin = 1/dctOp.iMaxOdd1 + 1/dctOp.iMaxOddX + 1/dctOp.iMaxOdd2
             
             
+            dctOp.iRate1 = (dctOp.iMaxOdd1-1)/(dctOp.iNormOdd1-1)
+            dctOp.iRateX = (dctOp.iMaxOddX-1)/(dctOp.iNormOddX-1)
+            dctOp.iRate2 = (dctOp.iMaxOdd2-1)/(dctOp.iNormOdd2-1)
+            
+            // recommendations
+            dctOp.sRec1 = dctOp.iRate1>iTresh ? 'x' : ''
+            dctOp.sRecX = dctOp.iRateX>iTresh ? 'x' : ''
+            dctOp.sRec2 = dctOp.iRate2>iTresh ? 'x' : ''
+            // arbitrage
+            dctOp.sArb = dctOp.iMargin<1 ? 'x' : ''
             lxdCompared.push(dctOp)
         }
-        
-
-
     })
+
+    
     if (lxdCompared.length === 0){
         alert('K porovnání nebylo nic nalezeno.')
     }else{
-        csv = fLxdToCsv(lxdCompared)
-        fDownloadFile('', csv, 'compared.csv')
+        //alert(`Bylo porovnáno ${lxdCompared.length} zápasů.`)
+        fLxdToLocalStorage(lxdCompared, 'Compared_Matches')
+        lxdToView = fModifyToView(lxdCompared)
+        renderTable(lxdToView, 'tableContainer');
     }
     
     
+}
+function fModifyToView(lxd){
+    return lxd.map(dct => {
+        return { 
+            'Zeme-cas': dct.sCountry + ' - ' + dct.sLeague + '\n' + dct.sDate + ' ' + dct.sTime,
+            'Teamy': dct.sTeam1 + ' - ' + dct.sTeam2,
+            'b1': dct.sBOMaxOdd1,
+            'v1': dct.iMaxOdd1 ? dct.iMaxOdd1.toFixed(2) : '',
+            'bX': dct.sBOMaxOddX,
+            'vX': dct.iMaxOddX ? dct.iMaxOddX.toFixed(2) : '',
+            'b2': dct.sBOMaxOdd2,
+            'v2': dct.iMaxOdd2 ? dct.iMaxOdd2.toFixed(2) : '',
+            'r1': dct.iRate1 ? dct.iRate1.toFixed(2) : '',
+            'rX': dct.iRateX ? dct.iRateX.toFixed(2) : '',
+            'r2': dct.iRate2 ? dct.iRate2.toFixed(2) : '',
+            'x1': dct.sRec1,
+            'xX': dct.sRecX,
+            'x2': dct.sRec2,
+            'Arb': dct.sArb
+        }
+    })
+}
+
+function fFindMaxByKey(lxd, key) {
+  return lxd.reduce((maxRow, currentRow) => {
+    if (!maxRow) return currentRow;
+    return currentRow[key] > maxRow[key] ? currentRow : maxRow;
+  }, null);
 }
 
 
@@ -562,73 +876,15 @@ function secondsUntil(commenceTime) {
 
 
 
-let jsonTheOdds = ''
 
-function processTheOdds() {
-    jsonTheOdds = document.getElementById('txtInputTheOdds').value;
-    let lxd = []
-    try {
-        lxd = JSON.parse(jsonTheOdds)    
+function fLxdToCsv(data, lstExtra=[]) {
+    if (data.length === 0) return '';
+    let headers = Object.keys(data[0]);
+    // Přidání extra sloupců do hlavičky, pokud nejsou již obsaženy
+    if (lstExtra.length > 0){
+        headers = [...new Set([...headers, ...lstExtra])];
     }
-    catch (error) {
-        alert("JSON is invalid:\n\n" +  error.message);
-    }
-
-    let lxdOutTheOdds = []
-
-    lxd.forEach(match => {
-        // if (true){
-        if (match.sport_key.includes('soccer') && secondsUntil(match.commence_time)!=0){
-
-            const sHomeTeam = match.home_team
-            const sAwayTeam = match.away_team
-            
-            let dctOdds = {}
-            dctOdds[sHomeTeam]=0
-            dctOdds[sAwayTeam]=0
-            dctOdds['Draw']=0
-            
-            if (match.bookmakers.length){
-                match.bookmakers.forEach(bk => {
-                    if (bk.markets[0].key === 'h2h'){
-                        bk.markets[0].outcomes.forEach(out => {
-                            dctOdds[out.name] += out.price
-                        })
-                    }
-                })
-                iAvgOdd1 = dctOdds[sHomeTeam]/match.bookmakers.length
-                iAvgOddX = dctOdds['Draw']/match.bookmakers.length
-                iAvgOdd2 = dctOdds[sAwayTeam]/match.bookmakers.length
-                const iMargin = 1/iAvgOdd1 + 1/iAvgOddX + 1/iAvgOdd2
-                iAvgOdd1 *= iMargin
-                iAvgOddX *= iMargin
-                iAvgOdd2 *= iMargin
-                
-                lxdOutTheOdds.push({
-                    'sport_key': match.sport_key,
-                    'sport_title': match.sport_title,
-                    'commence_time': match.commence_time,
-                    'home_team': match.home_team,
-                    'away_team': match.away_team,
-                    'odd1': iAvgOdd1.toString().replace('.', ','),
-                    'oddX': iAvgOddX.toString().replace('.', ','),
-                    'odd2': iAvgOdd2.toString().replace('.', ','),
-                    'margin': Math.round((iMargin-1)*1000)
-                })
-            }
-                
-        }
-    })
-    fLxdToCsv(lxdOutTheOdds, 'theOdds.csv')
-    
-    x=0
-    //renderResults(lxdMatches);
-};
-
-
-
-function fLxdToCsv(data) {
-  const headers = Object.keys(data[0]);
+  
 
   const rows = data.map(obj =>
     headers.map(h => `"${fReplaceDotToComma(obj[h])}"`).join(';')
@@ -644,11 +900,12 @@ function fLxdToCsv(data) {
 function fDownloadFile(sStorageKey, sCsv='', sFilename=''){
     let csvContent = ''
     if (sStorageKey){
-        csvContent = localStorage.getItem(sStorageKey+'_Csv')
+        csvContent = localStorage.getItem(sStorageKey)
     } else if(sCsv) {
         csvContent = sCsv
     }
-    sFilename = sFilename || sStorageKey + '.csv';
+    
+    sFilename = sFilename || sStorageKey
     if (!csvContent){
 
         alert(`Soubor ${sFilename} nebyl zatím vytvořen`)
@@ -661,6 +918,9 @@ function fDownloadFile(sStorageKey, sCsv='', sFilename=''){
 
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
+    sNow = fGetDateFormatted(0,'yymmdd_hhmnss')
+    sFilename = (sFilename + '.csv').replace('.csv.csv', '.csv')
+        .replace('.csv', '_' + sNow + '.csv')
     link.download = sFilename;
     link.click();
     }
@@ -700,36 +960,124 @@ function lxdToTable(lxd, columns, maxTreshold) {
 
 
 }
-
-function renderResults(matches) {
-
-    const container = document.getElementById('output');
-    container.innerHTML = '';
-
-    if (matches.length === 0) {
-        container.innerHTML = '<div class="alert alert-warning">No matches detected.</div>';
-        return;
+function fShowContentOfLocalStorage(sKey) {
+    const content = localStorage.getItem(sKey);
+    //alert(`Content of ${sKey}:\n\n` );
+    if (content) {
+        document.getElementById('output').value = content;
+    } else {
+        alert(`No content found for ${sKey}`);
     }
-
-    matches.forEach(m => {
-
-        const card = document.createElement('div');
-        card.className = 'card match-card';
-
-        card.innerHTML = `
-            <div class='card-body'>
-                <h5 class='card-title'>${m.team1} - ${m.team2}</h5>
-                <p class='text-muted'>${m.date} ${m.time}</p>
-
-                
-                <ul class='list-group'>
-                    <li class='list-group-item'>${m.odd1Frm}</li>
-                </ul>
-            </div>
-        `;
-
-        container.appendChild(card);
-    });
-    x=0
-    // ${m.odds.map(o => `<li class='list-group-item'>${o}</li>`).join('')}
 }
+
+
+function renderTable(data, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
+  if (!data.length) return;
+
+  const table = document.createElement('table');
+  table.className = 'niceTable';
+
+  const thead = document.createElement('thead');
+  const tbody = document.createElement('tbody');
+
+  const headers = Object.keys(data[0]).map(h => h.replace('MaxOdd', '')); // Add space before capital letters
+  let sortDirection = 1;
+
+  // Create header row
+  const headerRow = document.createElement('tr');
+
+  headers.forEach(key => {
+    const th = document.createElement('th');
+    th.textContent = key;
+    th.style.cursor = 'pointer';
+
+    th.onclick = () => {
+      sortDirection *= -1;
+
+      data.sort((a, b) => {
+        const valA = a[key];
+        const valB = b[key];
+
+        if (!isNaN(valA) && !isNaN(valB)) {
+          return (valA - valB) * sortDirection;
+        }
+
+        return valA.toString().localeCompare(valB.toString(), 'cs', { sensitivity: 'base' }) * sortDirection;
+      });
+
+      renderTable(data, containerId);
+    };
+
+    headerRow.appendChild(th);
+  });
+
+  thead.appendChild(headerRow);
+
+  // Create body rows
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+
+    headers.forEach(key => {
+      const td = document.createElement('td');
+      td.textContent = row[key];
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  container.appendChild(table);
+}
+
+function fOpenMultiple() {
+  urls = lxdBetOffices.map(d => d.sLinkToday).filter(link => link);
+  const linksContainer = document.getElementById('linksContainer');
+  linksContainer.innerHTML = ''; // Clear previous links
+  let a = document.createElement('a');
+  a.target = '_blank';
+  urls.forEach(url => {
+    let a = document.createElement('a');
+    a.target = '_blank';
+    
+    a.href = url;
+    
+    a.title = url;
+    //document.body.appendChild(a);
+    linksContainer.appendChild(a);
+    //alert(`Otevírám ${url}`)
+    //a.click();
+    // document.body.removeChild(a);
+  });
+}
+
+
+
+let currentIndex = 0;
+
+document.getElementById('btnNext').onclick = (e) => {
+    const urls = lxdBetOffices.map(d => d.sLinkToday).filter(link => link).reverse();
+  if (currentIndex >= urls.length) {
+    alert('No more URLs');
+    return;
+  }
+
+  //window.open(urls[currentIndex], '_blank');
+    const a = document.createElement('a');
+    a.target = '_blank';
+    a.href = urls[currentIndex];
+    
+    a.title = urls[currentIndex];
+    document.body.appendChild(a);
+    //linksContainer.appendChild(a);
+    //alert(`Otevírám ${url}`)
+    a.click();
+    document.body.removeChild(a);
+  currentIndex++;
+};
+
+
