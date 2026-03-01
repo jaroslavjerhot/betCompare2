@@ -1,4 +1,5 @@
 const sTransTeams = 'https://raw.githubusercontent.com/jaroslavjerhot/betCompare2/main/data/transTeams.csv'
+const sOffices = 'https://raw.githubusercontent.com/jaroslavjerhot/betCompare2/main/data/offices.csv'
 
 
 
@@ -36,6 +37,7 @@ function fCsvToLxd(csvText) {
     });
 
     return obj;
+    x=0
   });
 }
 
@@ -253,3 +255,64 @@ function fGetValByKeyFromLxd(lxd, sKeyName, xKey, sValName='dct'){
   if (sValName === 'dct') return dct
   return dct[sValName]
 }
+
+function removeAccents(str) {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function fFindInWholeLxd(lxd, searchStr) {
+  // 1️⃣ Normalize search strings
+  const searchNormalized = searchStr.normalize('NFC');
+  const searchUnaccented = removeAccents(searchStr).toLowerCase();
+
+  // 2️⃣ First pass: exact match
+  for (const row of lxd) {
+    for (const key in row) {
+      if (key === 'sId') continue;
+      const val = row[key];
+      if (typeof val !== 'string') continue;
+      if (val.normalize('NFC') === searchNormalized) return row;
+    }
+  }
+
+  // 3️⃣ Second pass: accent-insensitive match
+  for (const row of lxd) {
+    for (const key in row) {
+      if (key === 'sId') continue;
+      const val = row[key];
+      if (typeof val !== 'string') continue;
+      if (removeAccents(val).toLowerCase() === searchUnaccented) return row;
+    }
+  }
+
+  // 4️⃣ Not found
+  return null;
+}
+function fRemoveLocalStorage(sKey) {
+    localStorage.removeItem(sKey)
+}
+
+function fCreateDateTimeRegex(format) {
+  const tokens = {
+    dd: '(0[1-9]|[12][0-9]|3[01])',
+    mm: '(0[1-9]|1[0-2])',
+    yy: '\\d{2}',
+    yyyy: '\\d{4}',
+    hh: '([01][0-9]|2[0-3])',
+    mn: '[0-5][0-9]',
+    ss: '[0-5][0-9]'
+  };
+
+  let pattern = format;
+
+  // Replace longer tokens first (yyyy before yy)
+  Object.keys(tokens)
+    .sort((a, b) => b.length - a.length)
+    .forEach(token => {
+      pattern = pattern.replace(new RegExp(token, 'g'), tokens[token]);
+    });
+
+  return new RegExp('^' + pattern + '$');
+}
+
+
