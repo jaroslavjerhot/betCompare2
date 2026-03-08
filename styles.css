@@ -80,3 +80,32 @@ font-weight: bold;
   background: #e6f2ff;
 }
 
+
+.niceTable {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: Arial;
+}
+
+.niceTable th, .niceTable td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.niceTable th {
+  background: #2c3e50;
+  color: white;
+}
+
+.niceTable tr:nth-child(even) {
+  background: #f2f2f2;
+}
+.niceTable tr:nth-child(odd) {
+  background: #dedddd;
+}
+
+.niceTable tr:hover {
+  background: #e6f2ff;
+}
+

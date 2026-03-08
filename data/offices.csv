@@ -1,6 +1,6 @@
 sBoId;sName;sColor;sCheckPhrase;sNotPhrase;sMatchCountBy;sLinkToday;sLinkTomorrow;sLinkDate;sSearchLink;bUse
-Op;oddsPortal;yellow/black;Oddsportal.com;zápas;##n/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;;1
-Aw;allwyn;cyan/darkblue;Blog - Allwyn svìt;; | ;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TODAY;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TOMORROW;;;1
+Op;oddsPortal;yellow/black;Oddsportal.com;zï¿½pas;##n/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;https://www.oddsportal.com/matches/football/_YYYY_MM_DD/;;1
+Aw;allwyn;cyan/darkblue;Blog - Allwyn svï¿½t;; | ;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TODAY;https://www.allwyn.cz/kurzove-sazky/kurzy/11?timeFilter=TOMORROW;;;1
 Bx;bet-x;black/darkred;BETX Club;; / ;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=24;https://bet-x.cz/cs/sports-betting/offer/fotbal?hours=48;;;1
-Sn;synot;orange/white;IÈ 26301091;; | ;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=Today&categoryId=12;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=TodayTomorrow&categoryId=13;;https://sport.synottip.cz/zapasy/0?searchBy=_SSS&categoryId=12;1
+Sn;synot;orange/white;Iï¿½ 26301091;; | ;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=Today&categoryId=12;https://sport.synottip.cz/zapasy/12?filter=7&timeDate=TodayTomorrow&categoryId=13;;https://sport.synottip.cz/zapasy/0?searchBy=_SSS&categoryId=12;1
 Ts;tipsport;lightblue/orange;Tipsport.net a.s.;; | ;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.today;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.tomorrow;https://www.tipsport.cz/kurzy/fotbal-16?timeFilter=form.period.chooseDay&dateFrom=_UTC00000&dateTo=_UTC99999;https://www.tipsport.cz/hledani?limit=225&textsFilter=_SSS;1

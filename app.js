@@ -4,6 +4,7 @@
 
 
 
+
 let lxdTeams = []
 let lxdNewOpTeams = []
 let lxdBetOffices = []
@@ -172,6 +173,7 @@ function fRenderConsole(lxd) {
         <th>Age</th>
         <th>Počet</th>
         <th>Paste</th>
+        <th>Get Inner</th>
         <th>Process</th>
       </tr>
     </thead>
