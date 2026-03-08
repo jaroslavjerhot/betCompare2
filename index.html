@@ -11,14 +11,20 @@
 </head>
 <body class='bg-dark'>
 
-<div class="container py-4">
-    <div id="console">xxx</div>
-</div>
-<div id='linksContainer' class="container py-4">
-  <button class='btn btn-secondary me-2' id="btnNextToday" name="sLinkToday">Dnes</button>
-  <button class='btn btn-secondary me-2' id="btnNextTomorrow" name="sLinkTomorrow">Zítra</button>
-  <button class='btn btn-secondary me-2' onclick="fCompareOdds()">Porovnej</button>
+<div style="display:flex">
+    
+  <div class="container py-4">
+      <div id="console">xxx</div>
+  </div>
+  <div id='linksContainer' class="container py-4" style="height:100px; top:100px; left:10px; position:relative;">
+    <!-- <button class='btn btn-secondary me-2' id="btnNextToday" name="sLinkToday">Dnes</button>
+    <button class='btn btn-secondary me-2' id="btnNextTomorrow" name="sLinkTomorrow">Zítra</button> -->
+    <button class='btn btn-secondary me-2' onclick="fCompareOdds()">Porovnej</button>
+  </div>
 </div> 
+
+<div id="tableContainer"></div>
+
 
 <div class="container py-4" id="downloadSelectContainer">
   <div class="mb-3">
@@ -27,15 +33,14 @@
       
     </select>
   </div>
-<button class='btn btn-secondary me-2' onclick="fShowContentOfLocalStorage(document.getElementById('downloadSelect').value)">Zobrazit obsah</button>
-<button class='btn btn-secondary me-2' onclick="fDownloadFile(document.getElementById('downloadSelect').value)">Stáhnout výsledky</button>
-<button class='btn btn-secondary me-2' onclick="fRemoveLocalStorage(document.getElementById('downloadSelect').value)">Odstranit obsah</button>
-
-
 </div>
 
+<button class='btn btn-secondary me-2' onclick="fShowContentOfLocalStorage(document.getElementById('downloadSelect').value)">Zobrazit v text</button>
+<button class='btn btn-secondary me-2' onclick="fShowContentOfLocalStorageInTable(document.getElementById('downloadSelect').value)">Zobrazit v tabulce</button>
+<button class='btn btn-secondary me-2' onclick="fDownloadFile(document.getElementById('downloadSelect').value)">Stáhnout</button>
+<button class='btn btn-secondary me-2' onclick="fRemoveLocalStorage(document.getElementById('downloadSelect').value)">Odstranit</button>
+<p></p>
 <textarea id="output" rows="20" cols="100"></textarea>
-<div id="tableContainer"></div>
 
 
 <script src='base.js'></script>

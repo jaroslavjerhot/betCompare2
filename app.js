@@ -100,7 +100,7 @@ async function fPasteText(textareaId, sCheckWord, sCheckTrans='') {
     if (sName){
         alert(`Stažený text je z ${sName}. Je v něm ${iRows} řádků.`)
     }else{
-        alert('Stažený text nebyl rozpoznán. Možná byl automaticky přeložen do češtiny.')
+        alert(`Stažený text nebyl rozpoznán. Měl by obsahovat jeden z termínů: \n${lxdBetOffices.map(d => d.sName + ': ' + d.sCheckPhrase).join('\n ')}.\nMožná byl automaticky přeložen do češtiny.`)
         return
     }
     
@@ -172,9 +172,7 @@ function fRenderConsole(lxd) {
         <th>Age</th>
         <th>Počet</th>
         <th>Paste</th>
-        <th>Get Inner</th>
         <th>Process</th>
-        <th>Download</th>
       </tr>
     </thead>
     <tbody>`;
@@ -210,11 +208,7 @@ function fRenderConsole(lxd) {
       <td>${iMatches} zápasů</td>
       <td><button class="btn btn-success btn-sm" onclick="fPasteText()">Paste</button></td>
       <td><button class="btn btn-warning btn-sm" onclick="fProcessText('${dct.sBoId}')">Process</button></td>
-      <td><button class="btn btn-warning btn-sm" onclick="fLoadScrapedData('${dct.sName}','sLinkTomorrow')">Scrape tomorrow</button></td>
-      <td><button class="btn btn-warning btn-sm" onclick="fLoadScrapedData('${dct.sName}','sLinkToday')">Scrape today    </button></td>
-      <td><button class="btn btn-warning btn-sm" onclick="fProcessText('${dct.sName}')">Process</button></td>
-      <td><button class="btn btn-warning btn-sm" onclick="fDownloadFile('${dct.sName}')">Download</button></td>
-    </tr>`;
+      </tr>`;
     x=0
   });
 
@@ -280,7 +274,7 @@ function fGetDateFormatted(dateDiff = 0, sFormat='dd.mm.yyyy') {
 }
 
 function createTimestamp(dateStr, timeStr) {
-
+    if (!dateStr || !timeStr) {return ''}
     const [day, month, year] = dateStr.split('.');
     const [hour, minute] = timeStr.split(':');
 
@@ -388,12 +382,16 @@ function fProcessOddsPortal(lines) {
     // rawText = document.getElementById('txtOddsPortal').value;
     
     let sLeague = ''
+    let sDate = ''
+    let sSport = ''
+    let sCountry = ''   
     let lxd = []
     let lxdNewOpTeams = []
     let sNextIdForTeam = fGetNextIdForTeam(lxdTeams)
     
     let lstSports=['Football']
     const reTime = /^([0-1]?\d|2[0-3]):[0-5]\d$/;
+    
     
     for (let i = 0; i < lines.length; i++) {
         if (lstSports.some(word => lines[i].includes(word)) && lines[i+1]==='/') {
@@ -409,7 +407,12 @@ function fProcessOddsPortal(lines) {
             i+=3
         } else if (reTime.test(lines[i]) && lines[i+1]==''){
             sTime = lines[i]
-            sTs = createTimestamp(sDate, sTime)
+            if (sDate && sTime){
+                sTs = (sDate && sTime) ? createTimestamp(sDate, sTime) : ''
+            } else {
+                sTs = ''
+            }   
+
         } else if (lines[i]!='' & lines[i]===lines[i+1] && lines[i+2]==='' && lines[i+3]==='–' && lines[i+4]===lines[i+5] &&
             isDecimalOdd(lines[i+7]) && isDecimalOdd(lines[i+9]) &&isDecimalOdd(lines[i+11])){
             let match = {'sBoId': 'Op'};
@@ -834,8 +837,6 @@ function fCompareOdds(){
         lxdToView = fModifyToView(lxdCompared)
         renderTable(lxdToView, 'tableContainer');
     }
-    
-    
 }
 function fModifyToView(lxd){
     return lxd.map(dct => {
@@ -864,6 +865,15 @@ function fFindMaxByKey(lxd, key) {
     if (!maxRow) return currentRow;
     return currentRow[key] > maxRow[key] ? currentRow : maxRow;
   }, null);
+}
+function fShowContentOfLocalStorageInTable(sKey) {
+    const content = localStorage.getItem(sKey);
+    if (content) {
+        const lxd = fCsvToLxd(content);
+        renderTable(lxd, 'tableContainer');
+    } else {
+        alert(`No content found for ${sKey}`);
+    }
 }
 
 
