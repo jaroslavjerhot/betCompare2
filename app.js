@@ -165,7 +165,8 @@ function fLxdToLocalStorage(lxd, sKey, lstExtra=[]) {
 function fRenderConsole(lxd) {
   const container = document.getElementById("console");
   
-  let html = `<table class="table table-striped table-bordered">
+//   let html = `<table class="table table-striped table-bordered">
+  let html = `<table class="niceTable">
     <thead>
       <tr>
         <th>Name</th>
@@ -772,7 +773,8 @@ function fInsertNewTeamsToLxd(lxd, lxdNewTeams, sTeamCol){
     return lxd
 }
 function fCompareOdds(){
-    const iTresh = 0.98
+    const iTreshRate = 0.975
+    const iTreshOdd = 5
     const lxdOddsPortal = fCsvToLxd(localStorage.getItem('oddsPortal_Matches'))
     let lxdOther = []
     lxdBetOffices.forEach(d => {
@@ -820,9 +822,33 @@ function fCompareOdds(){
             dctOp.iRate2 = (dctOp.iMaxOdd2-1)/(dctOp.iNormOdd2-1)
             
             // recommendations
-            dctOp.sRec1 = dctOp.iRate1>iTresh ? 'x' : ''
-            dctOp.sRecX = dctOp.iRateX>iTresh ? 'x' : ''
-            dctOp.sRec2 = dctOp.iRate2>iTresh ? 'x' : ''
+            // dctOp.sRec1 = dctOp.iRate1>iTreshRate && dctOp.iMaxOdd1>iTreshOdd ? 'x' : ''
+            // dctOp.sRecX = dctOp.iRateX>iTreshRate && dctOp.iMaxOddX>iTreshOdd ? 'x' : ''
+            // dctOp.sRec2 = dctOp.iRate2>iTreshRate && dctOp.iMaxOdd2>iTreshOdd ? 'x' : ''
+
+            
+            function fBetVolume(iRate, iBase = 5){
+                if (iRate <= iTreshRate) return 0
+                return Math.round((iRate - iTreshRate) / (1-iTreshRate) * iBase + iBase)
+            }
+            function fReverseOdd(iOdd){
+                return (0.9/(iOdd-1)+1)
+            }
+             sRecommendation = ''
+            if (dctOp.iRate2>iTreshRate && dctOp.iMaxOdd2>iTreshOdd) sRecommendation = '2: ' + dctOp.sTeam2 + ' (' + dctOp.iMaxOdd2.toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate2) + ' Kč.'
+            if (dctOp.iRateX>iTreshRate && dctOp.iMaxOddX>iTreshOdd) sRecommendation = 'x: Remíza (' + dctOp.iMaxOddX.toFixed(2) + ')  + ' + fBetVolume(dctOp.iRateX) + ' Kč.'
+            if (dctOp.iRate1>iTreshRate && dctOp.iMaxOdd1>iTreshOdd) sRecommendation = '1: ' + dctOp.sTeam1 + ' (' + dctOp.iMaxOdd1.toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate1) + ' Kč.'
+            
+            if (dctOp.iRate2>iTreshRate && dctOp.iMaxOdd2<iTreshOdd) sRecommendation = '1x: nevýhra ' + dctOp.sTeam2 + ' (' + fReverseOdd(dctOp.iMaxOdd2).toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate2) + ' Kč.'
+            if (dctOp.iRateX>iTreshRate && dctOp.iMaxOddX<iTreshOdd) sRecommendation = '12: nebude remíza (' + fReverseOdd(dctOp.iMaxOddX).toFixed(2) + ')  + ' + fBetVolume(dctOp.iRateX) + ' Kč.'
+            if (dctOp.iRate1>iTreshRate && dctOp.iMaxOdd1<iTreshOdd) sRecommendation = 'x2: nevýhra ' + dctOp.sTeam1 + ' (' + fReverseOdd(dctOp.iMaxOdd1).toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate1) + ' Kč.'
+            
+            if (sRecommendation){
+                sRecommendation = 'Doporučení: ' + sRecommendation
+            }
+
+            dctOp.sRecommendation = sRecommendation.trim()
+
             // arbitrage
             dctOp.sArb = dctOp.iMargin<1 ? 'x' : ''
             lxdCompared.push(dctOp)
@@ -850,13 +876,14 @@ function fModifyToView(lxd){
             'vX': dct.iMaxOddX ? dct.iMaxOddX.toFixed(2) : '',
             'b2': dct.sBOMaxOdd2,
             'v2': dct.iMaxOdd2 ? dct.iMaxOdd2.toFixed(2) : '',
-            'r1': dct.iRate1 ? dct.iRate1.toFixed(2) : '',
-            'rX': dct.iRateX ? dct.iRateX.toFixed(2) : '',
-            'r2': dct.iRate2 ? dct.iRate2.toFixed(2) : '',
+            'r1': dct.iRate1 ? dct.iRate1.toFixed(3) : '',
+            'rX': dct.iRateX ? dct.iRateX.toFixed(3) : '',
+            'r2': dct.iRate2 ? dct.iRate2.toFixed(3) : '',
             'x1': dct.sRec1,
             'xX': dct.sRecX,
             'x2': dct.sRec2,
-            'Arb': dct.sArb
+            'Arb': dct.sArb,
+            'Doporučení': dct.sRecommendation
         }
     })
 }
