@@ -827,8 +827,9 @@ function fCompareOdds(){
             // dctOp.sRec2 = dctOp.iRate2>iTreshRate && dctOp.iMaxOdd2>iTreshOdd ? 'x' : ''
 
             
-            function fBetVolume(iRate, iBase = 5){
+            function fBetVolume(iRate, iBase = 180){
                 if (iRate <= iTreshRate) return 0
+                iBase = iBase / 30
                 return Math.round((iRate - iTreshRate) / (1-iTreshRate) * iBase + iBase)
             }
             function fReverseOdd(iOdd){
@@ -836,15 +837,15 @@ function fCompareOdds(){
             }
              sRecommendation = ''
             if (dctOp.iRate2>iTreshRate && dctOp.iMaxOdd2>iTreshOdd) sRecommendation = '2: ' + dctOp.sTeam2 + ' (' + dctOp.iMaxOdd2.toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate2) + ' Kč.'
-            if (dctOp.iRateX>iTreshRate && dctOp.iMaxOddX>iTreshOdd) sRecommendation = 'x: Remíza (' + dctOp.iMaxOddX.toFixed(2) + ')  + ' + fBetVolume(dctOp.iRateX) + ' Kč.'
             if (dctOp.iRate1>iTreshRate && dctOp.iMaxOdd1>iTreshOdd) sRecommendation = '1: ' + dctOp.sTeam1 + ' (' + dctOp.iMaxOdd1.toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate1) + ' Kč.'
+            if (dctOp.iRateX>iTreshRate && dctOp.iMaxOddX>iTreshOdd) sRecommendation = 'o: Remíza (' + dctOp.iMaxOddX.toFixed(2) + ')  + ' + fBetVolume(dctOp.iRateX) + ' Kč.'
             
-            if (dctOp.iRate2>iTreshRate && dctOp.iMaxOdd2<iTreshOdd) sRecommendation = '1x: nevýhra ' + dctOp.sTeam2 + ' (' + fReverseOdd(dctOp.iMaxOdd2).toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate2) + ' Kč.'
+            if (dctOp.iRate2>iTreshRate && dctOp.iMaxOdd2<iTreshOdd) sRecommendation = '1o: neprohra ' + dctOp.sTeam1 + ' (' + fReverseOdd(dctOp.iMaxOdd2).toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate2) + ' Kč.'
+            if (dctOp.iRate1>iTreshRate && dctOp.iMaxOdd1<iTreshOdd) sRecommendation = 'o2: neprohra ' + dctOp.sTeam2 + ' (' + fReverseOdd(dctOp.iMaxOdd1).toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate1) + ' Kč.'
             if (dctOp.iRateX>iTreshRate && dctOp.iMaxOddX<iTreshOdd) sRecommendation = '12: nebude remíza (' + fReverseOdd(dctOp.iMaxOddX).toFixed(2) + ')  + ' + fBetVolume(dctOp.iRateX) + ' Kč.'
-            if (dctOp.iRate1>iTreshRate && dctOp.iMaxOdd1<iTreshOdd) sRecommendation = 'x2: nevýhra ' + dctOp.sTeam1 + ' (' + fReverseOdd(dctOp.iMaxOdd1).toFixed(2) + ')  + ' + fBetVolume(dctOp.iRate1) + ' Kč.'
             
             if (sRecommendation){
-                sRecommendation = 'Doporučení: ' + sRecommendation
+                sRecommendation = sRecommendation
             }
 
             dctOp.sRecommendation = sRecommendation.trim()
