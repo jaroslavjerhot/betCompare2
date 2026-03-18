@@ -195,6 +195,10 @@ function fRenderConsole(lxd) {
     dct.sLinkToday = fGetDateFormatted(dateDiff = 0, dct.sLinkToday)
     dct.sLinkTomorrow = fGetDateFormatted(dateDiff = 1, dct.sLinkTomorrow)
 
+    dct.sLinkToday = dct.sLinkToday.replaceAll('timefilter','timeFilter')
+    dct.sLinkTomorrow = dct.sLinkTomorrow.replaceAll('timefilter','timeFilter')
+
+
     htmlLinkToday = dct.sLinkToday ? `<a href="${dct.sLinkToday}" target="_blank" class="btn btn-primary btn-sm btn-link">Dnes</a>` : ''
     htmlLinkTomorrow = dct.sLinkTomorrow ? `<a href="${dct.sLinkTomorrow}" target="_blank" class="btn btn-primary btn-sm btn-link">Zítra</a>` : ''
     htmlLinkDate = dct.sLinkDate ? `<a href="${dct.sLinkDate}" target="_blank" class="btn btn-primary btn-sm btn-link">Datum</a>` : ''
