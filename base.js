@@ -262,9 +262,11 @@ function removeAccents(str) {
 
 function fFindInWholeLxd(lxd, searchStr) {
   // 1️⃣ Normalize search strings
-  const searchNormalized = searchStr.normalize('NFC');
-  const searchUnaccented = removeAccents(searchStr).toLowerCase();
-
+  let searchNormalized = searchStr.normalize('NFC');
+  // replace ending Ž to W
+  if (searchNormalized.endsWith('Ž')) {
+    searchNormalized = searchNormalized.slice(0, -1) + 'W';
+  }
   // 2️⃣ First pass: exact match
   for (const row of lxd) {
     for (const key in row) {
@@ -275,6 +277,7 @@ function fFindInWholeLxd(lxd, searchStr) {
     }
   }
 
+   const searchUnaccented = removeAccents(searchStr).toLowerCase();
   // 3️⃣ Second pass: accent-insensitive match
   for (const row of lxd) {
     for (const key in row) {
@@ -284,6 +287,8 @@ function fFindInWholeLxd(lxd, searchStr) {
       if (removeAccents(val).toLowerCase() === searchUnaccented) return row;
     }
   }
+
+
 
   // 4️⃣ Not found
   return null;
