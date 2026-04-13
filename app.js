@@ -389,6 +389,9 @@ function fProcessOddsPortal(lines) {
     
     let sLeague = ''
     let sDate = ''
+    let sTime = ''
+    let sTs = ''
+    
     let sSport = ''
     let sCountry = ''   
     let lxd = []
@@ -419,7 +422,7 @@ function fProcessOddsPortal(lines) {
                 sTs = ''
             }   
 
-        } else if (lines[i]!='' & lines[i]===lines[i+1] && lines[i+2]==='' && lines[i+3]==='–' && lines[i+4]===lines[i+5] &&
+        } else if (sTs && lines[i]!='' && lines[i]===lines[i+1] && lines[i+2]==='' && lines[i+3]==='–' && lines[i+4]===lines[i+5] &&
             isDecimalOdd(lines[i+7]) && isDecimalOdd(lines[i+9]) &&isDecimalOdd(lines[i+11])){
             let match = {'sBoId': 'Op'};
             match.sId = '' 
